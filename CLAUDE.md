@@ -50,7 +50,7 @@ See the [plugins docs](https://code.claude.com/docs/en/plugins) for what's possi
 {
   "name": "<plugin-name>",
   "description": "One sentence describing what this plugin does.",
-  "version": "1.0.0"
+  "version": "0.1.0"
 }
 ```
 
@@ -63,7 +63,7 @@ Add an entry to `.claude-plugin/marketplace.json` under `plugins`:
   "name": "<plugin-name>",
   "source": "./<plugin-name>",
   "description": "One sentence describing what this plugin does.",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "author": { "name": "siracusa5" },
   "license": "MIT"
 }
@@ -94,11 +94,16 @@ Users add the marketplace once and install plugins by name:
 
 ## Versioning
 
-Bump `version` in both `plugin.json` and the `marketplace.json` entry when making breaking changes to a plugin. Claude Code uses version to detect updates.
+Semver. Versions in `plugin.json` and `marketplace.json` must always match.
+
+- **Patch** (0.1.0 → 0.1.1): Bug fixes, typo corrections, documentation clarifications. No change to what the skill does or how it behaves.
+- **Minor** (0.1.0 → 0.2.0): New features, new plugins added, new capabilities within existing plugins. Existing behavior unchanged — users who ignore the update are unaffected.
+- **Major** (0.x → 1.0): Breaking changes — renamed commands, removed features, changed output structure, anything that would break a user's existing workflow. 1.0.0 specifically means: stable, tested by real users, and committed to not breaking.
 
 ## Release checklist
 
-When changing any plugin's skill files:
+1. Bump `version` in `plugins/<name>/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` (must match)
+2. Commit: `chore: bump research plugin to vX.Y.Z`
+3. Create a GitHub release: `gh release create vX.Y.Z --generate-notes`
 
-1. Bump `version` in `plugins/<name>/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
-2. Commit together — version in both manifests must match
+`--generate-notes` auto-generates notes from commits since the last tag.
