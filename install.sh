@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Fallback installer for Claude Code versions without plugin marketplace support.
 # Preferred install:
-#   /plugin marketplace add siracusa5/claude-setup
-#   /plugin install research@claude-setup
+#   /plugin marketplace add siracusa5/harness-kit
+#   /plugin install research@harness-kit
 
 set -euo pipefail
 
-REPO="siracusa5/claude-setup"
+REPO="siracusa5/harness-kit"
 BRANCH="main"
 RAW_BASE="https://raw.githubusercontent.com/${REPO}/${BRANCH}"
 
@@ -38,14 +38,15 @@ if [[ -n "$LOCAL_PLUGINS" ]]; then
 else
   echo "Remote install: downloading from ${REPO}"
 
-  RESEARCH_DEST="${SKILLS_DEST}/research"
-  mkdir -p "$RESEARCH_DEST"
+  for plugin in research explain data-lineage orient; do
+    dest="${SKILLS_DEST}/${plugin}"
+    mkdir -p "$dest"
+    curl -fsSL "${RAW_BASE}/plugins/${plugin}/skills/${plugin}/SKILL.md"  -o "${dest}/SKILL.md"
+    curl -fsSL "${RAW_BASE}/plugins/${plugin}/skills/${plugin}/README.md" -o "${dest}/README.md"
+    echo "  ~/.claude/skills/${plugin}/"
+  done
 
-  curl -fsSL "${RAW_BASE}/plugins/research/skills/research/SKILL.md"  -o "${RESEARCH_DEST}/SKILL.md"
-  curl -fsSL "${RAW_BASE}/plugins/research/skills/research/README.md" -o "${RESEARCH_DEST}/README.md"
-
-  echo "Installed:"
-  echo "  ~/.claude/skills/research/"
+  echo "Installed all skills."
 fi
 
 echo ""
