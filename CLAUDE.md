@@ -28,11 +28,18 @@ harness-kit/
 │   │       └── explain/
 │   │           ├── SKILL.md
 │   │           └── README.md
-│   └── data-lineage/
+│   ├── data-lineage/
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json
+│   │   └── skills/
+│   │       └── data-lineage/
+│   │           ├── SKILL.md
+│   │           └── README.md
+│   └── orient/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       └── skills/
-│           └── data-lineage/
+│           └── orient/
 │               ├── SKILL.md
 │               └── README.md
 ├── install.sh                    ← script fallback for users without plugin marketplace

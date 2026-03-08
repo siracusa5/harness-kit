@@ -38,6 +38,7 @@ Downloads skill files to `~/.claude/skills/` over HTTPS. This installs only the 
 | [`research`](plugins/research/skills/research/README.md) | Process any source into a structured, compounding knowledge base |
 | [`explain`](plugins/explain/skills/explain/README.md) | Structured code explainer — layered explanations of files, functions, directories, or concepts |
 | [`data-lineage`](plugins/data-lineage/skills/data-lineage/README.md) | Trace column-level data lineage through SQL, Kafka, Spark, and JDBC codebases |
+| [`orient`](plugins/orient/skills/orient/README.md) | Topic-focused session orientation — search graph, knowledge, journal, and research for a specific topic |
 
 ### research
 
@@ -67,4 +68,16 @@ Trace column-level data lineage through messy, heterogeneous data stacks. Follow
 ```
 /data-lineage orders.total_amount
 /data-lineage customer_id in reporting.daily_summary
+```
+
+### orient
+
+Point it at a topic, entity type, or time qualifier and get a focused orientation briefing across your knowledge graph, knowledge files, journal entries, and research index. Only returns what's relevant — not everything.
+
+**Requirements:** Optional — [MCP Memory Server](https://github.com/anthropics/claude-code-memory) for graph search. Works without it.
+
+```
+/orient membrain
+/orient desires and tensions
+/orient recent evidence
 ```
