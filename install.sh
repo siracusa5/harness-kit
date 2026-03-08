@@ -38,7 +38,7 @@ if [[ -n "$LOCAL_PLUGINS" ]]; then
 else
   echo "Remote install: downloading from ${REPO}"
 
-  for plugin in research explain data-lineage orient; do
+  for plugin in research explain data-lineage orient stage; do
     dest="${SKILLS_DEST}/${plugin}"
     mkdir -p "$dest"
     curl -fsSL "${RAW_BASE}/plugins/${plugin}/skills/${plugin}/SKILL.md"  -o "${dest}/SKILL.md"

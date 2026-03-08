@@ -39,6 +39,14 @@
       "version": "0.1.0",
       "author": { "name": "siracusa5" },
       "license": "MIT"
+    },
+    {
+      "name": "stage",
+      "source": "./stage",
+      "description": "Capture session information into a staging file for later reflection and knowledge graph processing",
+      "version": "0.1.0",
+      "author": { "name": "siracusa5" },
+      "license": "MIT"
     }
   ]
 }
