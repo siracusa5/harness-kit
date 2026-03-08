@@ -56,6 +56,11 @@ The repo includes a standalone guide to organizing Claude Code configuration wit
 
 Read the full guide: **[Claude Conventions](docs/claude-md-conventions.md)**
 
+## Docs
+
+- **[Plugins vs. Skills](docs/plugins-vs-skills.md)** — Why everything ships as a plugin, even when it's just a prompt
+- **[Claude Conventions](docs/claude-md-conventions.md)** — Organizing Claude Code config with separation of concerns
+
 ## License
 
 MIT
