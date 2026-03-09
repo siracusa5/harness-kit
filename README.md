@@ -12,13 +12,12 @@ Requires [Claude Code](https://claude.ai/claude-code)
 
 </div>
 
-AI agents work best with structure, but configuring that structure is manual, scattered, and non-portable. harness-kit packages the setup into plugins you can install once and carry across projects — repeatable configuration instead of starting from scratch every time.
+AI agents work best with structure, but configuring that structure is manual, scattered, and non-portable. harness-kit packages the setup into plugins you can install once and carry across projects — repeatable configuration instead of starting from scratch every time. Everything ships as plain markdown files: no binaries, no runtimes, just prompts your AI can read.
 
 ## Install
 
 ```
 /plugin marketplace add siracusa5/harness-kit
-/plugin install research@harness-kit
 ```
 
 <details>
@@ -33,21 +32,45 @@ curl -fsSL https://raw.githubusercontent.com/siracusa5/harness-kit/main/install.
 Downloads skill files to `~/.claude/skills/` over HTTPS. This installs only the skill files; the full plugin (e.g. index rebuild script) comes from the marketplace install.
 </details>
 
+## Quick Start
+
+Install `explain` — no dependencies, works in any codebase:
+
+```
+/plugin install explain@harness-kit
+```
+
+Then try it:
+
+```
+/explain src/auth/middleware.ts       # explain a specific file
+/explain the payment processing flow  # search the codebase for a concept
+/explain src/services/                # map a directory
+```
+
+Produces a structured explanation: summary, key components, how it connects, patterns, gotchas, and where to start if you need to change it.
+
 ## Plugins
 
-| Plugin | What it does | Deps |
-|--------|-------------|------|
-| [`research`](plugins/research/skills/research/README.md) | Process any source into a structured, compounding knowledge base | gh CLI |
-| [`explain`](plugins/explain/skills/explain/README.md) | Layered explanations of files, functions, directories, or concepts | None |
-| [`data-lineage`](plugins/data-lineage/skills/data-lineage/README.md) | Trace column-level data lineage through SQL, Kafka, Spark, and JDBC codebases | None |
-| [`orient`](plugins/orient/skills/orient/README.md) | Topic-focused session orientation across graph, knowledge, journal, and research | None* |
-| [`stage`](plugins/stage/skills/stage/README.md) | Capture session information into a staging file for later reflection and knowledge graph processing | None |
+| Plugin | What it does | Try it |
+|--------|-------------|--------|
+| [`explain`](plugins/explain/skills/explain/README.md) | Layered explanations of files, functions, directories, or concepts | `/explain src/auth/` |
+| [`review`](plugins/review/skills/review/README.md) | Code review for a branch, PR, or path — structured output with severity labels | `/review` |
+| [`docgen`](plugins/docgen/skills/docgen/README.md) | Generate or update README, API docs, architecture overview, or changelog | `/docgen readme` |
+| [`research`](plugins/research/skills/research/README.md) | Process any source into a structured, compounding knowledge base | `/research https://...` |
+| [`data-lineage`](plugins/data-lineage/skills/data-lineage/README.md) | Trace column-level data lineage through SQL, Kafka, Spark, and JDBC codebases | `/data-lineage orders.amount` |
+| [`orient`](plugins/orient/skills/orient/README.md) ¹ | Topic-focused session orientation across graph, knowledge, journal, and research | `/orient auth` |
+| [`stage`](plugins/stage/skills/stage/README.md) ¹ | Capture session information into a staging file for later reflection | `/stage` |
 
-\* orient works without dependencies; optionally uses [MCP Memory Server](https://github.com/anthropics/claude-code-memory) for graph search.
+¹ Personal-workflow plugins designed for projects using the [knowledge graph + journal pattern](docs/claude-md-conventions.md).
+
+## Using with GitHub Copilot
+
+harness-kit targets Claude Code, but most of it works with any AI coding tool. SKILL.md files are plain markdown prompt templates — you can copy the relevant sections into your Copilot workspace instructions or custom agent prompt. The [conventions guide](#conventions-guide) applies directly to any tool that supports instruction files.
 
 ## Conventions Guide
 
-The repo includes a standalone guide to organizing Claude Code configuration with separation of concerns. Even if you don't use any plugins, this is worth reading.
+A standalone guide to organizing Claude Code configuration with separation of concerns. Worth reading even if you don't use any plugins.
 
 | File | Scope | Purpose |
 |------|-------|---------|
@@ -56,6 +79,10 @@ The repo includes a standalone guide to organizing Claude Code configuration wit
 | `SOUL.md` | Global only | Identity: values, relationship, memory |
 
 Read the full guide: **[Claude Conventions](docs/claude-md-conventions.md)**
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for plugin guidelines, skill conventions, and PR process.
 
 ## Docs
 

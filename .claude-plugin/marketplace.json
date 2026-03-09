@@ -12,7 +12,7 @@
       "name": "research",
       "source": "./research",
       "description": "Process any source into a structured, compounding knowledge base",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": { "name": "siracusa5" },
       "license": "MIT"
     },
@@ -20,7 +20,7 @@
       "name": "explain",
       "source": "./explain",
       "description": "Structured code explainer — layered explanations of files, functions, directories, or concepts",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": { "name": "siracusa5" },
       "license": "MIT"
     },
@@ -28,7 +28,7 @@
       "name": "data-lineage",
       "source": "./data-lineage",
       "description": "Trace column-level data lineage through SQL, Kafka, Spark, and JDBC codebases",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": { "name": "siracusa5" },
       "license": "MIT"
     },
@@ -36,7 +36,7 @@
       "name": "orient",
       "source": "./orient",
       "description": "Topic-focused session orientation — search graph, knowledge, journal, and research for a specific topic",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": { "name": "siracusa5" },
       "license": "MIT"
     },
@@ -44,7 +44,23 @@
       "name": "stage",
       "source": "./stage",
       "description": "Capture session information into a staging file for later reflection and knowledge graph processing",
-      "version": "0.1.0",
+      "version": "0.2.0",
+      "author": { "name": "siracusa5" },
+      "license": "MIT"
+    },
+    {
+      "name": "review",
+      "source": "./review",
+      "description": "Code review for a branch, PR, or path — structured output with severity labels and cross-file analysis",
+      "version": "0.2.0",
+      "author": { "name": "siracusa5" },
+      "license": "MIT"
+    },
+    {
+      "name": "docgen",
+      "source": "./docgen",
+      "description": "Generate or update README, API docs, architecture overview, or changelog — always confirms before writing",
+      "version": "0.2.0",
       "author": { "name": "siracusa5" },
       "license": "MIT"
     }
