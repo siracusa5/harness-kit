@@ -5,3 +5,10 @@ __pycache__/
 .env
 .venv/
 venv/
+private/
+
+# Docusaurus
+website/node_modules/
+website/build/
+website/.docusaurus/
+website/.cache-loader/
