@@ -3,7 +3,7 @@
 # Generates a short summary of the session and appends it to the staging file
 # for the daily reflection to consume and write to the knowledge graph.
 #
-# Bundled with the harness-kit stage plugin.
+# Bundled with the harness-kit capture-session plugin.
 # https://github.com/siracusa5/harness-kit
 
 set -euo pipefail
@@ -79,7 +79,7 @@ MANUAL_CONTEXT=""
 if grep -q "<!-- source: manual -->" "$STAGING_FILE" 2>/dev/null; then
   # Extract today's manual entries if any exist.
   # `found` is intentionally not reset between sections — if the user ran
-  # /stage multiple times today, we accumulate all their bullets.
+  # /capture-session multiple times today, we accumulate all their bullets.
   MANUAL_TODAY=$(awk "
     /^## ${TODAY}/ { in_section=1; next }
     /^## [0-9]/ { in_section=0 }

@@ -41,8 +41,8 @@
       "license": "Apache-2.0"
     },
     {
-      "name": "stage",
-      "source": "./stage",
+      "name": "capture-session",
+      "source": "./capture-session",
       "description": "Capture session information into a staging file for later reflection and knowledge graph processing",
       "version": "0.2.0",
       "author": { "name": "siracusa5" },
