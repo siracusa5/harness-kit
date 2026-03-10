@@ -1,0 +1,40 @@
+name: explain-fibonacci
+skill: explain
+version: 1
+
+input:
+  user_message: "/explain fib.py"
+  fixture: fibonacci
+
+expectations:
+  structure:
+    required_sections:
+      - Summary
+      - Key Components
+      - How It Connects
+      - Patterns & Conventions
+      - Gotchas
+      - Entry Points for Change
+    min_words: 200
+    max_words: 3000
+    must_contain:
+      - fibonacci
+    must_not_contain:
+      - "I don't have access"
+      - "I cannot"
+
+  quality:
+    - criterion: "Summary accurately describes what the fibonacci function does — computing the nth Fibonacci number iteratively"
+      weight: 2
+    - criterion: "Key Components lists both fib() and fib_sequence() with accurate one-line descriptions"
+      weight: 2
+    - criterion: "Gotchas either identifies the ValueError raised for negative input or states 'None identified' — does not invent issues that don't exist"
+      weight: 3
+    - criterion: "Explanation does not explain Python syntax basics (e.g., does not explain what a for loop or list comprehension is)"
+      weight: 1
+
+trials: 3
+tags:
+  - narrow-scope
+  - single-file
+  - python

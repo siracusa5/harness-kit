@@ -1,0 +1,32 @@
+name: review-clean-rename
+skill: review
+version: 1
+
+input:
+  user_message: "/review"
+  fixture: clean-rename-diff
+
+expectations:
+  structure:
+    required_sections:
+      - Verdict
+    min_words: 50
+    max_words: 1000
+    must_not_contain:
+      - BLOCKER
+      - "I don't have access"
+      - "I cannot"
+
+  quality:
+    - criterion: "Overall verdict is Approve — the rename is clean and complete across all files"
+      weight: 3
+    - criterion: "Review acknowledges the rename without inflating it into a blocking concern"
+      weight: 2
+    - criterion: "Review does not invent blockers or warnings that do not exist in the diff"
+      weight: 3
+
+trials: 3
+tags:
+  - review
+  - rename
+  - low-concern

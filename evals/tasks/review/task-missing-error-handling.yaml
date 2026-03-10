@@ -1,0 +1,35 @@
+name: review-missing-error-handling
+skill: review
+version: 1
+
+input:
+  user_message: "/review"
+  fixture: messy-diff
+
+expectations:
+  structure:
+    required_sections:
+      - Verdict
+    min_words: 100
+    max_words: 2000
+    must_contain:
+      - BLOCKER
+    must_not_contain:
+      - "I don't have access"
+      - "I cannot"
+
+  quality:
+    - criterion: "Identifies that row.Scan(&token) ignores the error return value — a Go anti-pattern that silently swallows scan failures"
+      weight: 3
+    - criterion: "Identifies that p.db.Exec(...) ignores the error return value on the INSERT statement"
+      weight: 3
+    - criterion: "Overall verdict is 'Request Changes' (not Approve) due to the identified blockers"
+      weight: 2
+    - criterion: "Review is structured with severity labels (BLOCKER/WARNING/NIT) rather than flat prose"
+      weight: 1
+
+trials: 3
+tags:
+  - review
+  - go
+  - error-handling

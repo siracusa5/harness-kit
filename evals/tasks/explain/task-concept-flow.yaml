@@ -1,0 +1,41 @@
+name: explain-auth-concept-flow
+skill: explain
+version: 1
+
+input:
+  user_message: "/explain the authentication flow"
+  fixture: express-app
+
+expectations:
+  structure:
+    required_sections:
+      - Summary
+      - Key Components
+      - How It Connects
+      - Patterns & Conventions
+      - Gotchas
+      - Entry Points for Change
+    min_words: 200
+    max_words: 4000
+    must_contain:
+      - jwt
+      - token
+    must_not_contain:
+      - "I don't have access"
+      - "I cannot"
+
+  quality:
+    - criterion: "Summary describes authentication as JWT Bearer token verification implemented as Express middleware"
+      weight: 2
+    - criterion: "Key Components identifies the authenticate function in src/middleware/auth.js as the core mechanism"
+      weight: 2
+    - criterion: "How It Connects traces the flow from incoming request through authenticate middleware to req.user being attached before the route handler runs"
+      weight: 3
+    - criterion: "Gotchas identifies that JWT_SECRET comes from an environment variable with no validation or fallback shown, or notes that expired tokens are rejected with no refresh mechanism"
+      weight: 2
+
+trials: 3
+tags:
+  - medium-scope
+  - concept
+  - javascript

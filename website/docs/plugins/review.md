@@ -1,0 +1,99 @@
+---
+sidebar_position: 7
+title: review
+---
+
+# review
+
+Structured code review for local branches, open PRs, or scoped paths.
+
+## Requirements
+
+- **Claude Code** — required
+- **`gh` CLI** ([GitHub CLI](https://cli.github.com/)) — required only for reviewing PRs by number. `GH_TOKEN` declared as optional in `plugin.json` — see [Secrets Management](/docs/guides/secrets-management) for setup.
+
+## What It Does
+
+When you invoke `/review`:
+
+1. Parses the input — PR number, path filter, git range, or bare invocation
+2. Gathers the diff using the appropriate command (`git diff` or `gh pr diff`)
+3. Classifies each changed file by category (new logic, refactor, test, config, docs, schema)
+4. Produces a per-file review with severity-labeled concerns
+5. Performs cross-file analysis for missing coverage, inconsistencies, and API changes
+6. Delivers an overall verdict: Approve, Request Changes, or Questions
+
+## Output Structure
+
+Each file gets a structured block:
+
+| Section | What it covers |
+|---------|---------------|
+| **Summary** | One sentence: what changed and why |
+| **Concerns** | Severity-labeled issues with file paths and line numbers |
+| **Questions** | Anything unclear about intent that a human author should clarify |
+
+Severity levels:
+
+| Label | Meaning |
+|-------|---------|
+| **BLOCKER** | Will cause a bug, crash, security issue, or data loss in production |
+| **WARNING** | Not immediately breaking but likely to cause problems |
+| **NIT** | Style, naming, minor clarity — fine to address or ignore |
+
+## Usage
+
+### Review current branch
+
+```
+/review
+```
+
+Diffs the current branch against `main`.
+
+### Review a pull request
+
+```
+/review 123
+```
+
+Fetches the diff via `gh pr diff`. Requires the `gh` CLI.
+
+### Review a scoped path
+
+```
+/review src/auth/
+```
+
+Limits the review to changes in the specified path.
+
+### Review a custom git range
+
+```
+/review main...HEAD
+```
+
+Uses the specified range directly.
+
+## Cross-File Analysis
+
+After individual files, the review checks:
+
+- **Missing test coverage** — new logic files with no corresponding test changes
+- **Inconsistencies** — interfaces updated in one file but not in implementors
+- **API contract changes** — public interface or endpoint signature changes
+- **New dependencies** — packages added to `package.json`, `go.mod`, etc.
+
+## Design Notes
+
+### Why read-only?
+
+The review is output to the conversation only. It never modifies files, posts GitHub comments, or takes any action. You decide what to do with the feedback.
+
+### Why severity labels?
+
+Not all concerns are equal. Distinguishing BLOCKERs from NITs prevents review fatigue and keeps focus on what actually matters for production safety.
+
+### Why cross-file analysis?
+
+Single-file reviews miss systemic issues. The cross-file pass catches the problems that live between files — missing tests, broken contracts, and inconsistent renames.

@@ -1,0 +1,39 @@
+name: Evals
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  run-evals:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: evals/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r evals/requirements.txt
+
+      - name: Run evals
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python evals/runner.py
+
+      - name: Render compatibility page
+        run: python evals/render_results.py
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add evals/results/latest.json website/docs/evals/compatibility.md
+          git diff --staged --quiet || git commit -m "chore: update eval results $(date -u +%Y-%m-%d)"
+          git push

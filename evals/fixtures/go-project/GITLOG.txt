@@ -1,0 +1,6 @@
+abc1234 feat: add item deletion endpoint
+def5678 fix: handle empty store response on list endpoint
+123abcd feat: add GET /api/items/:id endpoint
+456defg feat: add POST /api/items create endpoint
+789ghij feat: add GET /api/items list endpoint
+012ijkl chore: add go.mod and project scaffold

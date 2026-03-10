@@ -1,0 +1,90 @@
+---
+sidebar_position: 1
+title: Using with Other Tools
+---
+
+# Using with Other Tools
+
+harness-kit plugins are plain markdown — no binaries, no runtimes, nothing to compile. Any tool that reads prompt files or instruction markdown can use the workflows. The primary distribution path is Claude Code's plugin marketplace, but the content works anywhere.
+
+## Open Standard
+
+The skill format used by harness-kit follows the [Agent Skills specification](https://agentskills.io) — an open standard for cross-platform skill portability. Skills built to this spec work in Claude Code, GitHub Copilot, and any other compliant platform without modification. The sections below show how to wire harness-kit skills into each tool.
+
+## GitHub Copilot
+
+**Native plugin install (Copilot CLI):** GitHub Copilot has its own plugin system with a compatible structure. It discovers `plugin.json` in `.claude-plugin/` — the same location harness-kit uses — and follows the same `skills/NAME/SKILL.md` path. Install directly from the repo:
+
+```
+copilot plugin install siracusa5/harness-kit
+```
+
+**Manual — repo-wide instructions:** Copy a plugin's `SKILL.md` to `.github/copilot-instructions.md`. Copilot picks it up automatically for all conversations in that repo.
+
+**Path-scoped instructions:** Drop it in `.github/instructions/<name>.instructions.md` and add an `applyTo` glob in the frontmatter:
+
+```markdown
+---
+applyTo: "src/**"
+---
+
+[SKILL.md content here]
+```
+
+**CLAUDE.md native support:** VS Code Copilot reads `CLAUDE.md` natively when `chat.useClaudeMdFile` is enabled in settings. If you've configured harness-kit via `CLAUDE.md`, the conventions guide works in Copilot out of the box — zero changes required.
+
+:::note
+This convergence means a single `CLAUDE.md` can serve both Claude Code and Copilot simultaneously. You don't need to maintain separate instruction files.
+:::
+
+**Skills directories:** Some VS Code Copilot configurations recognize `.claude/skills/` alongside `.github/skills/`. Check the [Copilot customization docs](https://docs.github.com/en/copilot/reference/customization-cheat-sheet) for current skill directory support in your version.
+
+**Example — installing the `explain` skill as a scoped Copilot instruction:**
+
+```markdown
+---
+applyTo: "**"
+---
+
+[contents of explain/SKILL.md]
+```
+
+Save as `.github/instructions/explain.instructions.md`. The skill is now available in Copilot Chat for all files.
+
+## Cursor
+
+Copy a plugin's `SKILL.md` to `.cursor/rules/<name>.mdc` (note the `.mdc` extension). Cursor's `globs:` frontmatter key maps directly to harness-kit's scope controls if you want to restrict a skill to specific paths:
+
+```markdown
+---
+globs: "src/**/*.ts"
+---
+
+[SKILL.md content here]
+```
+
+## Windsurf
+
+Copy the `SKILL.md` content into `.windsurfrules`, or paste it through Windsurf's project rules UI. No frontmatter needed — Windsurf applies rules project-wide.
+
+## MCP Servers
+
+MCP has 100% cross-platform support — it's the only harness-kit feature that works identically everywhere. The wiring location varies by tool:
+
+| Tool | MCP config file |
+|------|----------------|
+| Claude Code | `.mcp.json` |
+| Copilot (VS Code) | `.vscode/mcp.json` |
+| Cursor | `.cursor/mcp.json` |
+
+Plugins that depend on MCP (like `orient` and `stage`) work in any of these tools as long as the server is wired up.
+
+## What You Lose
+
+| Feature | Claude Code | Other Tools |
+|---------|-------------|-------------|
+| Marketplace install/update | ✅ One command | ✅ Copilot CLI / ❌ Cursor, Windsurf |
+| Hooks | ✅ Auto-triggered | ❌ Harness-specific |
+| Auto-execution scripts | ✅ Bundled | ❌ Run manually |
+| SKILL.md workflows | ✅ | ✅ |
+| MCP server support | ✅ | ✅ (varies by tool) |

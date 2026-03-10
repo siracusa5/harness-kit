@@ -1,0 +1,16 @@
+.worktrees/
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+.env
+.venv/
+venv/
+private/
+docs/plans/
+
+# Docusaurus
+website/node_modules/
+website/build/
+website/.docusaurus/
+website/.cache-loader/

@@ -1,0 +1,34 @@
+name: docgen-readme-go-project
+skill: docgen
+version: 1
+
+input:
+  user_message: "/docgen readme"
+  fixture: go-project
+
+expectations:
+  structure:
+    required_sections:
+      - Install
+      - Usage
+    min_words: 100
+    max_words: 2000
+    must_not_contain:
+      - "I don't have access"
+      - "I cannot"
+
+  quality:
+    - criterion: "README describes a Go HTTP API server for managing items with list, get, and create endpoints"
+      weight: 2
+    - criterion: "README includes build or run instructions appropriate for a Go project (go build, go run, or similar)"
+      weight: 2
+    - criterion: "Output ends with a confirmation prompt asking to write to disk ('Want me to write this to' or equivalent)"
+      weight: 3
+    - criterion: "README does not include padded or generic empty sections — only sections relevant to the actual project"
+      weight: 1
+
+trials: 3
+tags:
+  - docgen
+  - readme
+  - go

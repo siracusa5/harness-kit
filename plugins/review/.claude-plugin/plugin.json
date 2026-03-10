@@ -1,0 +1,17 @@
+{
+  "name": "review",
+  "description": "Code review for a branch, PR, or path — structured output with severity labels and cross-file analysis",
+  "version": "0.2.0",
+  "developed_with": "claude-sonnet-4",
+  "requires": {
+    "env": [
+      {
+        "name": "GH_TOKEN",
+        "description": "GitHub personal access token — used by gh CLI for fetching PR diffs",
+        "required": false,
+        "sensitive": true,
+        "when": "Reviewing pull requests by number (e.g., /review 123)"
+      }
+    ]
+  }
+}

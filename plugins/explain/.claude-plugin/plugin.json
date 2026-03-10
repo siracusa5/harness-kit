@@ -1,0 +1,6 @@
+{
+  "name": "explain",
+  "description": "Structured code explainer — layered explanations of files, functions, directories, or concepts",
+  "version": "0.2.0",
+  "developed_with": "claude-sonnet-4"
+}

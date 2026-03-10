@@ -1,0 +1,30 @@
+name: docgen-changelog
+skill: docgen
+version: 1
+
+input:
+  user_message: "/docgen changelog"
+  fixture: go-project
+
+expectations:
+  structure:
+    required_sections:
+      - Added
+    min_words: 50
+    max_words: 1000
+    must_not_contain:
+      - "I don't have access"
+      - "I cannot"
+
+  quality:
+    - criterion: "Changelog groups commits by type (Added, Fixed, Changed, etc.) rather than dumping raw git log output"
+      weight: 3
+    - criterion: "Changelog includes the feat: commits from GITLOG.txt — adding items list, get, and create endpoints"
+      weight: 2
+    - criterion: "Output ends with a confirmation prompt asking to write to disk ('Want me to write this to' or equivalent)"
+      weight: 2
+
+trials: 3
+tags:
+  - docgen
+  - changelog

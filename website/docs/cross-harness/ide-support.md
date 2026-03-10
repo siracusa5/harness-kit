@@ -1,0 +1,46 @@
+---
+sidebar_position: 3
+title: IDE Support Matrix
+---
+
+# IDE Support Matrix
+
+Quick reference for feature support by editor — useful when deciding where to invest harness configuration.
+
+## GitHub Copilot Features by Editor
+
+| Feature | VS Code | Visual Studio | JetBrains | Eclipse | Xcode | GitHub.com | CLI |
+|---|---|---|---|---|---|---|---|
+| Code completions | ✅ | ✅ | ✅ | ✅ | ✅ | N/A | ✅ |
+| Chat (inline/sidebar) | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
+| copilot-instructions.md | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | ✅ |
+| Path-scoped instructions (.github/instructions/) | ✅ | 🔄 | 🔄 | ❌ | ❌ | ❌ | ❌ |
+| Prompt files (.github/prompts/) | ✅ | ❌ | 🔄 | ❌ | ❌ | ❌ | ❌ |
+| Agent mode (.github/agents/) | ✅ | ❌ | 🔄 | ❌ | ❌ | ❌ | ❌ |
+| MCP servers | ✅ | ❌ | 🔄 | ❌ | ❌ | ❌ | ❌ |
+| CLAUDE.md native support (chat.useClaudeMdFile) | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Native plugin install | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+
+> 🔄 = Preview or actively rolling out. Check release notes for current status.
+
+## harness-kit Plugin Portability
+
+| Plugin | Claude Code | Copilot CLI | VS Code (Copilot) | Cursor | Windsurf |
+|---|---|---|---|---|---|
+| explain | ✅ native | ✅ native | ✅ copy SKILL.md | ✅ copy SKILL.md | ✅ copy SKILL.md |
+| review | ✅ native | ✅ native | ✅ copy SKILL.md | ✅ copy SKILL.md | ✅ copy SKILL.md |
+| docgen | ✅ native | ✅ native | ✅ copy SKILL.md | ✅ copy SKILL.md | ✅ copy SKILL.md |
+| research | ✅ native | ✅ native | ✅ copy SKILL.md | ✅ copy SKILL.md | ✅ copy SKILL.md |
+| data-lineage | ✅ native | ✅ native | ✅ copy SKILL.md | ✅ copy SKILL.md | ✅ copy SKILL.md |
+| orient | ✅ native | ✅ native | 🔄 MCP required | 🔄 MCP required | ❌ no MCP |
+| stage | ✅ native | ✅ native | 🔄 MCP required | 🔄 MCP required | ❌ no MCP |
+
+> MCP-required plugins work in tools that support MCP servers.
+
+## MCP as Universal Fallback
+
+MCP has the broadest cross-tool support of any harness-kit feature. The `orient` and `stage` plugins depend on MCP Memory Server — any tool supporting MCP (via `.vscode/mcp.json`, `.cursor/mcp.json`, etc.) can run these plugins. MCP is the forward-compatible path for bringing harness-kit capabilities to new editors as support expands.
+
+## Last Updated
+
+Last updated: 2026-03-09

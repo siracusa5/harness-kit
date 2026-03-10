@@ -1,0 +1,110 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON manifests
+        run: |
+          echo "Checking marketplace.json..."
+          python3 -c "import json; json.load(open('.claude-plugin/marketplace.json'))"
+
+          echo "Checking plugin manifests..."
+          for manifest in plugins/*/.claude-plugin/plugin.json; do
+            echo "  $manifest"
+            python3 -c "import json; json.load(open('$manifest'))"
+          done
+
+      - name: Check version alignment
+        run: |
+          python3 -c "
+          import json, sys
+
+          marketplace = json.load(open('.claude-plugin/marketplace.json'))
+          errors = []
+
+          for plugin in marketplace['plugins']:
+              name = plugin['name']
+              mp_version = plugin['version']
+              manifest_path = f\"plugins/{name}/.claude-plugin/plugin.json\"
+
+              try:
+                  manifest = json.load(open(manifest_path))
+              except FileNotFoundError:
+                  errors.append(f'{name}: plugin.json not found at {manifest_path}')
+                  continue
+
+              pj_version = manifest.get('version', '(missing)')
+              if mp_version != pj_version:
+                  errors.append(f'{name}: marketplace.json says {mp_version}, plugin.json says {pj_version}')
+
+          if errors:
+              print('Version mismatch:')
+              for e in errors:
+                  print(f'  {e}')
+              sys.exit(1)
+          else:
+              for plugin in marketplace['plugins']:
+                  print(f\"{plugin['name']}: v{plugin['version']}\")
+              print('All versions aligned.')
+          "
+
+      - name: Validate requires.env schema
+        run: |
+          python3 -c "
+          import json, sys, glob
+
+          errors = []
+
+          for manifest_path in glob.glob('plugins/*/.claude-plugin/plugin.json'):
+              manifest = json.load(open(manifest_path))
+              requires = manifest.get('requires', {})
+              env_list = requires.get('env', [])
+
+              for i, entry in enumerate(env_list):
+                  prefix = f'{manifest_path} requires.env[{i}]'
+
+                  if not isinstance(entry.get('name'), str) or not entry['name']:
+                      errors.append(f'{prefix}: missing or invalid \"name\" (must be non-empty string)')
+                  if not isinstance(entry.get('description'), str) or not entry['description']:
+                      errors.append(f'{prefix}: missing or invalid \"description\" (must be non-empty string)')
+                  if 'required' in entry and not isinstance(entry['required'], bool):
+                      errors.append(f'{prefix}: \"required\" must be boolean if present')
+                  if 'sensitive' in entry and not isinstance(entry['sensitive'], bool):
+                      errors.append(f'{prefix}: \"sensitive\" must be boolean if present')
+
+          if errors:
+              print('requires.env schema errors:')
+              for e in errors:
+                  print(f'  {e}')
+              sys.exit(1)
+          else:
+              print('requires.env schema valid.')
+          "
+
+  docs-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+
+      - name: Install dependencies
+        working-directory: website
+        run: npm ci
+
+      - name: Build docs
+        working-directory: website
+        run: npm run build

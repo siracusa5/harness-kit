@@ -1,0 +1,85 @@
+---
+sidebar_position: 8
+title: docgen
+---
+
+# docgen
+
+Generate or update project documentation from the codebase — READMEs, API references, architecture overviews, and changelogs.
+
+## Requirements
+
+None — works in any codebase. `gh` CLI optional for changelog with remote tags.
+
+## What It Does
+
+When you invoke `/docgen` with a doc type:
+
+1. Parses the doc type and scope from your arguments
+2. Gathers context from the codebase — project structure, entry points, route definitions, or git history
+3. Checks for existing documentation and identifies what to preserve vs. regenerate
+4. Generates the document to the conversation first
+5. Asks before writing anything to disk
+
+## Doc Types
+
+| Type | What it generates | Scope |
+|------|------------------|-------|
+| `readme` | Project or package README | Root or specified subdirectory |
+| `api` | API endpoint reference with routes, params, and responses | Specified path (required) |
+| `architecture` | Architecture overview from codebase structure | Project root |
+| `changelog` | Grouped changelog from git history | Optional version range |
+
+## Usage
+
+### Generate a README
+
+```
+/docgen readme
+/docgen readme src/auth/
+```
+
+### Generate API docs
+
+```
+/docgen api src/routes/
+```
+
+Reads actual route definitions — not just descriptions — to produce accurate endpoint tables.
+
+### Generate an architecture overview
+
+```
+/docgen architecture
+```
+
+Produces a components table, data flow description, and key files reference from the project structure.
+
+### Generate a changelog
+
+```
+/docgen changelog v0.2.0..v0.3.0
+```
+
+Groups commits by conventional commit type (feat, fix, docs, refactor). Filters merge commits and WIP noise. Without a range, uses commits since the last tag.
+
+## Key Behaviors
+
+- **Conversation first.** Always outputs to the conversation and asks "Want me to write this to [path]?" before touching any file.
+- **Preserves manual content.** If a doc already exists, identifies manually written sections and states a preservation plan before generating.
+- **Style matching.** Detects the project's heading style, case conventions, and formatting — then matches them.
+- **No filler.** Omits empty sections rather than padding with boilerplate. If there's no configuration, there's no Configuration section.
+
+## Design Notes
+
+### Why conversation-first?
+
+Generated docs need review. Outputting to conversation lets you request changes before anything hits disk — no risk of overwriting work.
+
+### Why preserve manual content?
+
+The best docs combine generated structure with hand-written explanations. Blowing away prose that someone wrote by hand is worse than having slightly stale auto-generated sections.
+
+### Why style matching?
+
+A README that uses `##` top-level headings in a project that uses `#` looks wrong. Matching existing style makes generated docs feel native, not bolted on.

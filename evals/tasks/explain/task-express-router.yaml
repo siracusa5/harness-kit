@@ -1,0 +1,42 @@
+name: explain-express-router
+skill: explain
+version: 1
+
+input:
+  user_message: "/explain src/routes/users.js"
+  fixture: express-app
+
+expectations:
+  structure:
+    required_sections:
+      - Summary
+      - Key Components
+      - How It Connects
+      - Patterns & Conventions
+      - Gotchas
+      - Entry Points for Change
+    min_words: 250
+    max_words: 3000
+    must_contain:
+      - authenticate
+      - router
+    must_not_contain:
+      - "I don't have access"
+      - "I cannot"
+
+  quality:
+    - criterion: "Summary describes the users router as handling CRUD operations (list, get, create) for users with JWT authentication"
+      weight: 2
+    - criterion: "How It Connects correctly identifies that authenticate middleware is applied to all routes and the router calls the db module"
+      weight: 3
+    - criterion: "Patterns & Conventions identifies Express router pattern and/or middleware chain pattern"
+      weight: 2
+    - criterion: "Gotchas identifies missing error handling in GET /:id (unhandled db.query rejection) or missing input validation in POST"
+      weight: 3
+
+trials: 3
+tags:
+  - narrow-scope
+  - single-file
+  - javascript
+  - express

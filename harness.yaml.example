@@ -1,0 +1,52 @@
+# harness.yaml — your personal harness configuration
+#
+# Commit this to your dotfiles and restore it on any new machine.
+#
+# Restore with Claude Code:
+#   /harness-import harness.yaml
+#
+# Restore without Claude Code (skills only):
+#   curl -fsSL https://raw.githubusercontent.com/siracusa5/harness-kit/main/harness-restore.sh | bash -s -- harness.yaml
+
+version: 1
+
+# marketplaces: mapping of short name → owner/repo
+# The short name is what you use after @ in /plugin install commands.
+marketplaces:
+  harness-kit: siracusa5/harness-kit
+  # obra: obra/superpowers-marketplace
+
+plugins:
+  - name: explain
+    marketplace: harness-kit
+    description: Layered explanations of files, functions, directories, or concepts
+
+  - name: research
+    marketplace: harness-kit
+    description: Process any source into a structured, compounding knowledge base
+
+  - name: review
+    marketplace: harness-kit
+    description: Code review for a branch, PR, or path — severity labels and cross-file analysis
+
+  # Uncomment to include additional harness-kit plugins:
+  # - name: docgen
+  #   marketplace: harness-kit
+  #   description: Generate or update README, API docs, architecture overview, or changelog
+
+  # - name: data-lineage
+  #   marketplace: harness-kit
+  #   description: Column-level lineage tracing through SQL, Kafka, Spark, and JDBC
+
+  # - name: orient
+  #   marketplace: harness-kit
+  #   description: Topic-focused session orientation across graph, knowledge, and research
+
+  # - name: stage
+  #   marketplace: harness-kit
+  #   description: Capture session information into a staging file for later reflection
+
+  # Example third-party plugin (uncomment the marketplace entry above too):
+  # - name: superpowers
+  #   marketplace: obra
+  #   description: Structured dev workflows — TDD, systematic debugging, subagent delegation

@@ -1,0 +1,5 @@
+{
+  "name": "harness-share",
+  "description": "Export, share, and import your harness-kit configuration — capture installed plugins into harness.yaml and restore them on any machine",
+  "version": "0.2.0"
+}

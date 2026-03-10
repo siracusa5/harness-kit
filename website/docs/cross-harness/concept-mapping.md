@@ -1,0 +1,116 @@
+---
+sidebar_position: 2
+title: Configuration Primitives
+---
+
+# Configuration Primitives
+
+Every AI coding tool has converged on the same five configuration primitives — they just named them differently. Understanding the mapping lets you move configuration between tools without starting from scratch. harness-kit targets these primitives directly, so configuration you write once works across harnesses.
+
+## The Five Primitives
+
+| Primitive | Claude Code | Copilot (VS Code) | Cursor |
+|-----------|-------------|-------------------|--------|
+| **Instructions** | `CLAUDE.md`, `.claude/rules/*.md` | `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md` | `.cursor/rules/*.mdc` |
+| **Prompt Templates** | Skills (`SKILL.md` in `.claude/skills/`) | `.github/prompts/*.prompt.md` | Rule files with glob scope |
+| **Agent Definitions** | `.claude/agents/*.md` | `.github/agents/*.agent.md` | Not yet supported |
+| **Skills** | `.claude/skills/` | `.github/skills/` | Not yet supported |
+| **Tool Servers** | `.mcp.json` | `.vscode/mcp.json` | `.cursor/mcp.json` |
+
+## Instruction Files
+
+Instruction files inject persistent context into the AI's working memory for a session. Each tool has its own format.
+
+**File path patterns:**
+
+- Claude Code: `CLAUDE.md` (repo root), `.claude/rules/*.md`
+- Copilot: `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md`
+- Cursor: `.cursor/rules/*.mdc`
+
+**Scoping model:**
+
+`CLAUDE.md` is always repo-wide. Claude Code uses `include` directives to pull in additional rule files. Copilot and Cursor both support path-scoped instructions via frontmatter, letting you attach different context to different parts of the codebase.
+
+**How globs work:**
+
+- Copilot (`.github/instructions/`): `applyTo` frontmatter field — a glob pattern that activates the instruction file when the referenced file is in context
+- Cursor (`.mdc` files): `globs:` frontmatter field — same idea, different key
+- Claude Code: no per-file scoping at the instruction level; use `include` rules in `CLAUDE.md` to compose multiple files
+
+**Path-scoped instruction example:**
+
+Copilot (`.github/instructions/api-routes.instructions.md`):
+```markdown
+---
+applyTo: "src/routes/**"
+---
+
+All route handlers must validate request bodies with zod. Return 422 on validation failure.
+```
+
+Cursor (`.cursor/rules/api-routes.mdc`):
+```markdown
+---
+globs: src/routes/**
+---
+
+All route handlers must validate request bodies with zod. Return 422 on validation failure.
+```
+
+Claude Code does not have a direct equivalent — repo-wide instructions in `CLAUDE.md` cover this, or you can structure the file with headings that address specific subsystems.
+
+## Three-Tier Scoping
+
+All three tools use the same three-tier model: personal preferences, project config shared with the team, and organization-level policy that overrides both.
+
+| Tier | Claude Code | Copilot | Cursor |
+|------|-------------|---------|--------|
+| **Personal** | `~/.claude/CLAUDE.md` | VS Code user settings | `~/.cursor/rules/` |
+| **Project** | `CLAUDE.md` / `.claude/` | `.github/` | `.cursor/` |
+| **Organization** | Enterprise policy | GitHub Copilot policies | Cursor Business |
+
+The project tier is what harness-kit targets. Personal and organization config live outside the repo and outside harness-kit's scope.
+
+## Agent Files
+
+Agent definition files describe specialized sub-agents that can be invoked within a session. The format is similar across tools.
+
+**Claude Code** (`.claude/agents/*.md`): YAML frontmatter with `name`, `description`, and `tools` array. The body is the agent's system prompt.
+
+```markdown
+---
+name: code-reviewer
+description: Reviews PRs for style, correctness, and test coverage
+tools:
+  - read_file
+  - list_directory
+---
+
+Review the diff and produce structured feedback...
+```
+
+**Copilot** (`.github/agents/*.agent.md`): Same frontmatter structure, with `tools` as a YAML array.
+
+```markdown
+---
+name: code-reviewer
+description: Reviews PRs for style, correctness, and test coverage
+tools:
+  - read_file
+  - list_directory
+---
+
+Review the diff and produce structured feedback...
+```
+
+**Cursor**: Not yet supported. Watch the Cursor roadmap.
+
+## Convergence Note
+
+:::tip The walls are thinner than they appear
+
+VS Code already reads `CLAUDE.md` natively via `chat.useClaudeMdFile`. Configuration written for Claude Code works in VS Code Copilot without modification for the parts that matter most — instruction context.
+
+harness-kit leans into this: rather than abstracting over differences, it generates idiomatic files for each harness from a single source, covering the gaps where native compatibility ends.
+
+:::
