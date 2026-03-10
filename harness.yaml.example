@@ -42,7 +42,7 @@ plugins:
   #   marketplace: harness-kit
   #   description: Topic-focused session orientation across graph, knowledge, and research
 
-  # - name: stage
+  # - name: capture-session
   #   marketplace: harness-kit
   #   description: Capture session information into a staging file for later reflection
 

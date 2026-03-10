@@ -22,7 +22,7 @@ Repeat for any plugin you want:
 /plugin install explain@harness-kit
 /plugin install data-lineage@harness-kit
 /plugin install orient@harness-kit
-/plugin install stage@harness-kit
+/plugin install capture-session@harness-kit
 /plugin install review@harness-kit
 /plugin install docgen@harness-kit
 ```
@@ -62,7 +62,7 @@ For per-tool setup instructions (Copilot, Cursor, Windsurf, MCP wiring), see [Us
 | explain | None |
 | data-lineage | None |
 | orient | None (optional: [MCP Memory Server](https://github.com/anthropics/claude-code-memory)) |
-| stage | None |
+| capture-session | None |
 | review | `gh` CLI (PR review only) |
 | docgen | None |
 

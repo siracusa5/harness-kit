@@ -43,9 +43,9 @@ const plugins = [
     to: '/docs/plugins/orient',
   },
   {
-    name: 'stage',
+    name: 'capture-session',
     description: 'Capture session information into a staging file for later reflection.',
-    to: '/docs/plugins/stage',
+    to: '/docs/plugins/capture-session',
   },
   {
     name: 'review',

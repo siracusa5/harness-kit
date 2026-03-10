@@ -134,7 +134,7 @@ Conventional commits with imperative present tense:
 
 Examples from this repo:
 ```
-feat: stage plugin — on-demand session information capture
+feat: capture-session plugin — on-demand session information capture
 feat(orient): improve query behavior, caps, and output format
 docs: add plugins vs. skills guide
 chore: set initial version to v0.1.0

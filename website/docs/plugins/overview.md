@@ -15,7 +15,7 @@ harness-kit ships 7 plugins, all at v0.2.0. Each packages a proven workflow as a
 | [explain](explain) | Layered explanations of files, functions, directories, or concepts | None |
 | [data-lineage](data-lineage) | Column-level lineage tracing through SQL, Kafka, Spark, JDBC | None |
 | [orient](orient) | Topic-focused session orientation across graph, knowledge, and research | None (optional: MCP Memory Server) |
-| [stage](stage) | Capture session information into a staging file for later reflection | None |
+| [capture-session](capture-session) | Capture session information into a staging file for later reflection | None |
 | [review](review) | Structured code review for branches, PRs, or paths with severity labels | `gh` CLI (PR review only) |
 | [docgen](docgen) | Generate or update README, API docs, architecture overview, or changelog | None |
 

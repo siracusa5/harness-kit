@@ -33,13 +33,13 @@ Quick reference for feature support by editor — useful when deciding where to 
 | research | ✅ native | ✅ native | ✅ copy SKILL.md | ✅ copy SKILL.md | ✅ copy SKILL.md |
 | data-lineage | ✅ native | ✅ native | ✅ copy SKILL.md | ✅ copy SKILL.md | ✅ copy SKILL.md |
 | orient | ✅ native | ✅ native | 🔄 MCP required | 🔄 MCP required | ❌ no MCP |
-| stage | ✅ native | ✅ native | 🔄 MCP required | 🔄 MCP required | ❌ no MCP |
+| capture-session | ✅ native | ✅ native | 🔄 MCP required | 🔄 MCP required | ❌ no MCP |
 
 > MCP-required plugins work in tools that support MCP servers.
 
 ## MCP as Universal Fallback
 
-MCP has the broadest cross-tool support of any harness-kit feature. The `orient` and `stage` plugins depend on MCP Memory Server — any tool supporting MCP (via `.vscode/mcp.json`, `.cursor/mcp.json`, etc.) can run these plugins. MCP is the forward-compatible path for bringing harness-kit capabilities to new editors as support expands.
+MCP has the broadest cross-tool support of any harness-kit feature. The `orient` and `capture-session` plugins depend on MCP Memory Server — any tool supporting MCP (via `.vscode/mcp.json`, `.cursor/mcp.json`, etc.) can run these plugins. MCP is the forward-compatible path for bringing harness-kit capabilities to new editors as support expands.
 
 ## Last Updated
 

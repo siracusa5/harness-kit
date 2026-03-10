@@ -20,7 +20,7 @@ const sidebars = {
         'plugins/explain',
         'plugins/data-lineage',
         'plugins/orient',
-        'plugins/stage',
+        'plugins/capture-session',
         'plugins/review',
         'plugins/docgen',
       ],

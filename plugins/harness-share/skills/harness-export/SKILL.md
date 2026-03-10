@@ -51,7 +51,7 @@ For each installed skill, determine its marketplace and description:
 | research | Process any source into a structured, compounding knowledge base |
 | data-lineage | Column-level lineage tracing through SQL, Kafka, Spark, and JDBC |
 | orient | Topic-focused session orientation across graph, knowledge, and research |
-| stage | Capture session information into a staging file for later reflection |
+| capture-session | Capture session information into a staging file for later reflection |
 | review | Code review for a branch, PR, or path — severity labels and cross-file analysis |
 | docgen | Generate or update README, API docs, architecture overview, or changelog |
 | harness-export | Export your installed plugins to a shareable harness.yaml |

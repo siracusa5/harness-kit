@@ -63,8 +63,8 @@ Searches your knowledge graph, docs, and journal for everything related to a top
 ### Capture session facts
 
 ```
-/plugin install stage@harness-kit
-/stage SQLite chosen over Postgres for local-first storage
+/plugin install capture-session@harness-kit
+/capture-session SQLite chosen over Postgres for local-first storage
 ```
 
 Stages important decisions and facts for later reflection.
