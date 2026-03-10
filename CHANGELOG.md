@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.1 — Unreleased
+
+### Changed
+
+- Renamed `stage` plugin to `capture-session` for clarity — the slash command is now `/capture-session`. The staging file (`session-staging.md`) keeps its name.
+
+---
+
 ## 0.2.0 — 2026-03-09
 
 ### Added
