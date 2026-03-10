@@ -6,12 +6,16 @@ on:
     paths:
       - 'website/**'
       - '.github/workflows/deploy-docs.yml'
+    tags-ignore:
+      - '**'
+  release:
+    types: [published]
 
 permissions:
   contents: read
 
 concurrency:
-  group: pages
+  group: pages-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
@@ -34,9 +38,18 @@ jobs:
         working-directory: website
         run: npm run build
 
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy preview
+        if: github.event_name == 'push'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy website/build --project-name=harness-kit-docs
+          command: pages deploy website/build --project-name=harness-kit-docs --branch=preview
+
+      - name: Deploy production
+        if: github.event_name == 'release'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy website/build --project-name=harness-kit-docs --branch=main
