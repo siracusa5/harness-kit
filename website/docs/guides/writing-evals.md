@@ -127,7 +127,7 @@ python evals/runner.py --dry-run
 
 ## Tips
 
-- Keep fixtures small (1–5 files, <500 lines total) — they're loaded verbatim into the prompt
+- Keep fixtures small (1–5 files, &lt;500 lines total) — they're loaded verbatim into the prompt
 - Write `must_not_contain` checks for known failure modes (e.g., "I don't have access")
 - Use `--structure-only` during task authoring to iterate without API grading cost
 - Quality criteria should be binary and unambiguous — avoid "good" or "clear" without defining what that means
