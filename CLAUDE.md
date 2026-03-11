@@ -88,7 +88,7 @@ Add an entry to `.claude-plugin/marketplace.json` under `plugins`:
   "source": "./<plugin-name>",
   "description": "One sentence describing what this plugin does.",
   "version": "0.1.0",
-  "author": { "name": "siracusa5" },
+  "author": { "name": "your-github-handle" },
   "license": "Apache-2.0"
 }
 ```
@@ -112,7 +112,7 @@ Under `## Skills` (or a new `## Agents`, `## Hooks` section as appropriate), add
 Users add the marketplace once and install plugins by name:
 
 ```
-/plugin marketplace add siracusa5/harness-kit
+/plugin marketplace add harnessprotocol/harness-kit
 /plugin install research@harness-kit
 ```
 
