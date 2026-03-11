@@ -25,7 +25,12 @@ jobs:
       - name: Run evals
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python evals/runner.py
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "ANTHROPIC_API_KEY not set — skipping evals"
+            exit 0
+          fi
+          python evals/runner.py
 
       - name: Render compatibility page
         run: python evals/render_results.py
