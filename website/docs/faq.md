@@ -79,6 +79,27 @@ A list of your installed plugins with their sources and versions. Export it with
 
 Not necessarily. Project-specific workflows belong in `CLAUDE.md`. If you find yourself copying the same prompt into every new project, that's probably a sign it would work better as a plugin.
 
+## How is harness-kit different from A2A, the Claude Agent SDK, or MCP?
+
+They operate at different layers and don't overlap.
+
+| Layer | What it solves | Example |
+|-------|---------------|---------|
+| Configuration | How is this agent set up? | harness-kit |
+| Tool communication | How does the agent call tools? | MCP |
+| Runtime communication | How do agents talk to each other? | A2A |
+| Developer SDK | How do I build an agent? | Claude Agent SDK |
+
+MCP gives your agent tools. A2A lets agents delegate tasks to each other at runtime. The Claude Agent SDK is for building agent-powered applications. harness-kit describes the complete environment, plugins, MCP servers, instructions, permissions, so you can reproduce it on another machine or share it with a teammate. They compose well: a `harness.yaml` can declare MCP servers, the agent runs on the Claude SDK, and could speak A2A to other agents.
+
+See [Where harness-kit fits](/docs/concepts/comparison) for the full breakdown.
+
+## What is the Harness Protocol?
+
+The [Harness Protocol](https://github.com/siracusa5/harness-protocol) is an open specification for portable AI coding harness configuration. It defines a vendor-neutral `harness.yaml` format validated by JSON Schema. harness-kit is the reference implementation, the same way Claude Desktop implements MCP. Any tool that correctly validates and applies `harness.yaml` per the spec is a conformant implementation; harness-kit is not required.
+
+The spec is Apache 2.0. See [Harness Protocol](/docs/concepts/harness-protocol) for how it relates to harness-kit.
+
 ## Do any plugins need API keys or tokens?
 
 Two plugins have optional environment variable dependencies:
