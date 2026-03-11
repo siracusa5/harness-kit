@@ -13,7 +13,7 @@
       "source": "./research",
       "description": "Process any source into a structured, compounding knowledge base",
       "version": "0.2.0",
-      "author": { "name": "siracusa5" },
+      "author": { "name": "harnessprotocol" },
       "license": "Apache-2.0"
     },
     {
@@ -21,7 +21,7 @@
       "source": "./explain",
       "description": "Structured code explainer — layered explanations of files, functions, directories, or concepts",
       "version": "0.2.0",
-      "author": { "name": "siracusa5" },
+      "author": { "name": "harnessprotocol" },
       "license": "Apache-2.0"
     },
     {
@@ -29,7 +29,7 @@
       "source": "./data-lineage",
       "description": "Trace column-level data lineage through SQL, Kafka, Spark, and JDBC codebases",
       "version": "0.2.0",
-      "author": { "name": "siracusa5" },
+      "author": { "name": "harnessprotocol" },
       "license": "Apache-2.0"
     },
     {
@@ -37,7 +37,7 @@
       "source": "./orient",
       "description": "Topic-focused session orientation — search graph, knowledge, journal, and research for a specific topic",
       "version": "0.2.0",
-      "author": { "name": "siracusa5" },
+      "author": { "name": "harnessprotocol" },
       "license": "Apache-2.0"
     },
     {
@@ -45,7 +45,7 @@
       "source": "./capture-session",
       "description": "Capture session information into a staging file for later reflection and knowledge graph processing",
       "version": "0.2.0",
-      "author": { "name": "siracusa5" },
+      "author": { "name": "harnessprotocol" },
       "license": "Apache-2.0"
     },
     {
@@ -53,7 +53,7 @@
       "source": "./review",
       "description": "Code review for a branch, PR, or path — structured output with severity labels and cross-file analysis",
       "version": "0.2.0",
-      "author": { "name": "siracusa5" },
+      "author": { "name": "harnessprotocol" },
       "license": "Apache-2.0"
     },
     {
@@ -61,7 +61,7 @@
       "source": "./docgen",
       "description": "Generate or update README, API docs, architecture overview, or changelog — always confirms before writing",
       "version": "0.2.0",
-      "author": { "name": "siracusa5" },
+      "author": { "name": "harnessprotocol" },
       "license": "Apache-2.0"
     },
     {
@@ -69,7 +69,7 @@
       "source": "./harness-share",
       "description": "Export, share, and import your harness-kit plugin configuration — capture your setup into harness.yaml and restore it anywhere",
       "version": "0.2.0",
-      "author": { "name": "siracusa5" },
+      "author": { "name": "harnessprotocol" },
       "license": "Apache-2.0"
     },
     {
