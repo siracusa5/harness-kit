@@ -3,6 +3,8 @@ sidebar_position: 6
 title: capture-session
 ---
 
+> **[View in Marketplace →](https://marketplace.harnessprotocol.io/components/capture-session)** for install tracking, related plugins, and profiles.
+
 # capture-session
 
 Capture session information into a staging file for later reflection and knowledge graph processing.
@@ -125,3 +127,11 @@ Both sources feed the same staging file, processed uniformly by the daily reflec
 ### Why append-only?
 
 The staging file is a write-ahead log. Modifying existing entries would corrupt the audit trail and break deduplication logic.
+
+## Runtime Configuration
+
+{/* @embed plugins/capture-session/skills/capture-session/SKILL.md */}
+
+## Plugin Documentation
+
+{/* @embed plugins/capture-session/skills/capture-session/README.md */}

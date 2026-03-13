@@ -5,19 +5,22 @@ title: Plugin Overview
 
 # Plugins
 
-harness-kit ships 7 plugins, all at v0.2.0. Each packages a proven workflow as a portable prompt template, currently distributed through Claude Code's plugin marketplace.
+harness-kit ships 10 plugins across 6 categories. Each packages a proven workflow as a portable prompt template, currently distributed through Claude Code's plugin marketplace.
 
 ## At a Glance
 
 | Plugin | What it does | Dependencies |
 |--------|-------------|-------------|
-| [research](research) | Process any source into a structured, compounding knowledge base | `gh` CLI (GitHub only), Python 3.10+ |
-| [explain](explain) | Layered explanations of files, functions, directories, or concepts | None |
-| [data-lineage](data-lineage) | Column-level lineage tracing through SQL, Kafka, Spark, JDBC | None |
-| [orient](orient) | Topic-focused session orientation across graph, knowledge, and research | None (optional: MCP Memory Server) |
-| [capture-session](capture-session) | Capture session information into a staging file for later reflection | None |
-| [review](review) | Structured code review for branches, PRs, or paths with severity labels | `gh` CLI (PR review only) |
-| [docgen](docgen) | Generate or update README, API docs, architecture overview, or changelog | None |
+| [research](research-knowledge/research) | Process any source into a structured, compounding knowledge base | `gh` CLI (GitHub only), Python 3.10+ |
+| [orient](research-knowledge/orient) | Topic-focused session orientation across graph, knowledge, and research | None (optional: MCP Memory Server) |
+| [capture-session](research-knowledge/capture-session) | Capture session information into a staging file for later reflection | None |
+| [review](code-quality/review) | Structured code review for branches, PRs, or paths with severity labels | `gh` CLI (PR review only) |
+| [explain](code-quality/explain) | Layered explanations of files, functions, directories, or concepts | None |
+| [data-lineage](data-engineering/data-lineage) | Column-level lineage tracing through SQL, Kafka, Spark, JDBC | None |
+| [docgen](documentation/docgen) | Generate or update README, API docs, architecture overview, or changelog | None |
+| [ship-pr](devops/ship-pr) | End-of-task workflow: open a PR, code review, fix CI, squash merge | `gh` CLI |
+| [pull-request-sweep](devops/pull-request-sweep) | Cross-repo PR sweep: triage, review, merge, fix CI | `gh` CLI |
+| [harness-share](productivity/harness-share) | Compile, export, import, and sync harness configs across AI tools | None |
 
 Plugin dependencies are formally declared in `plugin.json` under `requires`. See [Secrets & Configuration](/docs/concepts/secrets-management) for the full schema.
 
