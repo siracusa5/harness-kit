@@ -26,7 +26,7 @@ Plugin dependencies are formally declared in `plugin.json` under `requires`. See
 
 ## Install any plugin
 
-```
+```bash
 /plugin marketplace add harnessprotocol/harness-kit
 /plugin install <plugin-name>@harness-kit
 ```
