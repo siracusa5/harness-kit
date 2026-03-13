@@ -166,3 +166,4 @@ Before opening a PR:
 - [ ] `README.md` exists in `plugins/<name>/skills/<name>/`
 - [ ] Plugin section added to `README.md` at repo root
 - [ ] PR includes a test plan with at least one test per argument type
+- [ ] If plugin includes agents: `agents/<name>.md` has YAML frontmatter with `name:` and `description:`

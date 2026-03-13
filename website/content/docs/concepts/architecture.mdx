@@ -259,7 +259,7 @@ plugins/<name>/
 | `README.md` | Human-facing docs — usage examples, notes | Never (reference only) |
 | `scripts/` | Shell scripts for automation | Called by SKILL.md or hooks |
 | `hooks/` | Event handlers (e.g., Stop hook) | On harness lifecycle events |
-| `agents/` | Agent configurations | When a skill spawns subagents |
+| `agents/` | Subagent definitions — isolated workers with their own context, tools, and permissions | When a skill or user delegates to a named agent |
 
 ## What Makes a Skill Different from a Prompt
 

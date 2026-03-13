@@ -55,6 +55,7 @@ harness-kit/
 plugins/<plugin-name>/
 ├── .claude-plugin/
 │   └── plugin.json
+├── agents/               ← optional, for specialist subagents
 ├── scripts/              ← optional, for bundled utilities
 └── skills/
     └── <skill-name>/

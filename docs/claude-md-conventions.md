@@ -230,6 +230,8 @@ Combine with `--output-format json` and `--json-schema` for reliable CI integrat
 
 ### Agent Best Practices
 
+> **Note:** This section is about custom subagent definitions (`.claude/agents/`), not AGENT.md. AGENT.md configures Claude's behavior; subagent definitions create isolated specialist workers.
+
 When defining custom agents in `.claude/agents/`:
 
 - **Treat agents as teammates with job descriptions** — clear description, scoped tools, specific purpose.
@@ -237,14 +239,43 @@ When defining custom agents in `.claude/agents/`:
 - **Scope by path** — restrict editable paths (e.g., `src/`, `tests/`, `docs/`) to prevent unintended changes.
 - **Use `isolation: worktree`** for agents that work in parallel — each gets its own git worktree, no conflicts.
 
+**Example agents:**
+
 ```yaml
-# .claude/agents/code-reviewer.md frontmatter
+# .claude/agents/code-reviewer.md — read-only analysis
+---
 name: code-reviewer
-description: Reviews code for quality and correctness
-tools: Read, Glob, Grep
+description: Reviews code for quality, correctness, and potential issues. Never modifies files.
+tools: [Read, Glob, Grep, Bash, LSP]
 model: sonnet
 permissionMode: plan
+---
+
+You are a thorough code reviewer. Analyze code for bugs, style issues, and design problems.
+Report findings with file paths and line numbers. Never edit files.
 ```
+
+```yaml
+# .claude/agents/doc-writer.md — scoped write access
+---
+name: doc-writer
+description: Writes and updates documentation files. Restricted to docs/ directory.
+tools: [Read, Write, Glob, Grep]
+model: sonnet
+permissionMode: acceptEdits
+---
+
+You write and update documentation. Focus on clarity and completeness.
+Only write to files in the docs/ directory.
+```
+
+> **Note:** Path restrictions in the agent body are behavioral instructions, not enforced constraints. To hard-enforce which paths an agent can write to, use `allowedPaths` in the frontmatter if your harness supports it.
+
+**When NOT to use a subagent:**
+
+- Simple tasks that fit in the current conversation — overhead isn't worth it
+- Tasks that need the full conversation history — subagents start fresh
+- One-off isolation needs — use `context: fork` in SKILL.md frontmatter instead
 
 ### MCP Server Hygiene
 

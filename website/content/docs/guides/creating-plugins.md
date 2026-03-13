@@ -13,6 +13,7 @@ A step-by-step guide to creating a new harness-kit plugin.
 plugins/<plugin-name>/
 ├── .claude-plugin/
 │   └── plugin.json
+├── agents/               ← optional, for specialist subagents
 ├── scripts/              ← optional, for bundled utilities
 └── skills/
     └── <skill-name>/
@@ -228,6 +229,53 @@ The README is human-facing documentation. Cover:
 - Usage examples (copy-paste ready)
 - Output structure
 - Design notes (rationale)
+
+## 5a. Add Agent Definitions (Optional)
+
+If your plugin needs a specialist worker — for delegated analysis, parallel processing, or scoped read-only exploration — add agent definitions under `agents/`:
+
+```
+plugins/<plugin-name>/
+├── .claude-plugin/
+│   └── plugin.json
+├── skills/
+│   └── <skill-name>/
+│       ├── SKILL.md
+│       └── README.md
+└── agents/
+    └── <agent-name>.md    ← YAML frontmatter + system prompt
+```
+
+When to include an agent:
+- **Delegated analysis** — work that benefits from a clean context window with no session history
+- **Read-only exploration** — use `permissionMode: plan` to provably prevent file writes
+- **Background processing** — long-running tasks that run while the main session continues
+- **Parallel work** — use `isolation: worktree` for agents that work simultaneously
+
+A minimal agent definition:
+
+```yaml
+---
+name: code-explorer
+description: Read-only codebase explorer — searches and maps code structure without modifying files
+tools: [Read, Glob, Grep, Bash]
+model: haiku
+permissionMode: plan
+---
+
+You are a read-only codebase explorer. Search, read, and map code structure.
+Never modify files. Report findings clearly.
+```
+
+To invoke your agent from a skill, instruct Claude to use the Agent tool with your agent name:
+
+```markdown
+## Step 3: Explore the Codebase
+
+Use the Agent tool with agent `code-explorer` to map the directory structure.
+```
+
+See [Understanding Agents](/docs/concepts/agents) for the full frontmatter field reference.
 
 ## 6. Add to Root README
 

@@ -62,7 +62,7 @@ Produces a structured explanation: summary, key components, how it connects, pat
 | [`research`](plugins/research/skills/research/README.md) | Process any source into a structured, compounding knowledge base | `/research https://...` |
 | [`data-lineage`](plugins/data-lineage/skills/data-lineage/README.md) | Trace column-level data lineage through SQL, Kafka, Spark, and JDBC codebases | `/data-lineage orders.amount` |
 | [`orient`](plugins/orient/skills/orient/README.md) ¹ | Topic-focused session orientation across graph, knowledge, journal, and research | `/orient auth` |
-| [`stage`](plugins/stage/skills/stage/README.md) ¹ | Capture session information into a staging file for later reflection | `/stage` |
+| [`capture-session`](plugins/capture-session/skills/capture-session/README.md) ¹ | Capture session information into a staging file for later reflection | `/capture-session` |
 | [`harness-share`](plugins/harness-share/skills/harness-export/README.md) | Export your plugin setup to `harness.yaml`, import it anywhere, and validate against the Harness Protocol v1 spec | `/harness-export` · `/harness-import` · `/harness-validate` |
 
 ¹ Personal-workflow plugins designed for projects using the [knowledge graph + journal pattern](docs/claude-md-conventions.md).
@@ -118,6 +118,8 @@ A standalone guide to organizing Claude Code configuration with separation of co
 
 Read the full guide: **[Claude Conventions](docs/claude-md-conventions.md)**
 
+Plugins can also include agent definitions — isolated specialist workers with their own context and scoped tools. See [Understanding Agents](https://harnessprotocol.io/docs/concepts/agents) for how agents, AGENT.md, and subagent definitions relate.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for plugin guidelines, skill conventions, and PR process.
@@ -127,6 +129,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for plugin guidelines, skill conventions,
 - **[FAQ](FAQ.md)** — What is this, why do I need it, how does it work
 - **[Plugins vs. Skills](docs/plugins-vs-skills.md)** — Why everything ships as a plugin, even when it's just a prompt
 - **[Claude Conventions](docs/claude-md-conventions.md)** — Organizing Claude Code config with separation of concerns
+- **[Understanding Agents](https://harnessprotocol.io/docs/concepts/agents)** — Disambiguating AGENT.md, custom subagents, and "AI agent" generally
 
 ## License
 

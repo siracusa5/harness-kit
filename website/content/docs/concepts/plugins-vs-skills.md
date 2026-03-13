@@ -15,6 +15,7 @@ Marketplace
       │    └── my-skill/
       │         ├── SKILL.md            ← the prompt (runtime unit)
       │         └── README.md           ← docs
+      ├── agents/                       ← optional specialist workers
       ├── scripts/                      ← optional automation
       └── hooks/                        ← optional triggers
 ```
@@ -24,7 +25,7 @@ Marketplace
 | **What it is** | A prompt file | A package containing skills + extras |
 | **Installed via** | Copy to `~/.claude/skills/` | `/plugin install name@marketplace` |
 | **Versioned** | No | Yes (`plugin.json`) |
-| **Can include scripts/hooks** | No | Yes |
+| **Can include extras (scripts, hooks, agents)** | No | Yes |
 | **Listed in marketplace** | No | Yes |
 
 **One sentence:** the skill is what Claude Code runs; the plugin is how users install it.
@@ -83,3 +84,19 @@ Want to share or distribute it?
 ```
 
 Starting with a bare skill for prototyping and promoting to a plugin once it stabilizes is a fine workflow. The plugin wrapper earns its keep at distribution time.
+
+## Where Do Agents Fit?
+
+Agents are a third component type that plugins can contain, alongside skills and scripts. A plugin can ship a skill that delegates work to a named agent defined in `agents/`.
+
+| | Skill | Agent | Script |
+|--|-------|-------|--------|
+| **What it is** | A prompt workflow | An isolated specialist worker | A shell utility |
+| **Invoked by** | User slash command or Claude | A skill, user, or Claude | A skill or hook |
+| **Gets own context** | No (shares session) | Yes (fresh context window) | N/A |
+| **Has scoped tools/permissions** | No | Yes | N/A |
+| **Defined in** | `skills/<name>/SKILL.md` | `agents/<name>.md` | `scripts/<name>` |
+
+The key difference: a skill runs in the current session's context, sharing the conversation history. An agent spins up with a clean slate, isolated tools, and its own permission scope — useful for analysis tasks you want to provably constrain (read-only codebase exploration, background document fetching) or work you want to run in parallel.
+
+See [Understanding Agents](/docs/concepts/agents) for the full picture — including how custom subagent definitions differ from AGENT.md.
