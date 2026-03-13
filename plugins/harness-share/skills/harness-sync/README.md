@@ -85,6 +85,7 @@ Skills are tracked by install location and labelled accordingly:
 | `.cursor/skills/` | `(local)` | Cursor project-local skill file |
 | `~/.cursor/skills/` | `(global)` | Cursor global skills (if directory exists) |
 | `.github/skills/` | `(local)` | Copilot project-local skill file |
+| `.agents/skills/` | `(shared)` | agentskills.io shared location (Cursor + Copilot) |
 
 Global and project-local installs are not interchangeable — the sync report distinguishes them.
 
@@ -105,7 +106,7 @@ All platforms are now in sync.
 
 ## Related Skills
 
-- `/harness-compile` — compile a harness.yaml into native configs (push path depends on this)
+- `/harness-compile` — compile a harness.yaml into native configs (push uses harness-compile logic)
 - `/harness-validate` — validate a harness.yaml before syncing
 - `/harness-export` — capture your current setup into a harness.yaml
 - `/harness-import` — install plugins from a harness.yaml

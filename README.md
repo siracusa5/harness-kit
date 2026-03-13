@@ -8,7 +8,7 @@ A configuration framework for AI coding tools.
 [![Validate](https://img.shields.io/github/actions/workflow/status/harnessprotocol/harness-kit/validate.yml?style=flat-square&label=validate)](https://github.com/harnessprotocol/harness-kit/actions/workflows/validate.yml)
 [![License](https://img.shields.io/github/license/harnessprotocol/harness-kit?style=flat-square)](LICENSE)
 
-Requires [Claude Code](https://claude.ai/claude-code)
+Works with [Claude Code](https://claude.ai/claude-code), [Cursor](https://cursor.com), and [GitHub Copilot](https://github.com/features/copilot)
 
 </div>
 

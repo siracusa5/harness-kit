@@ -31,6 +31,7 @@ Without an argument, looks for `harness.yaml` in the current directory.
 | `--target <tool>` | Compile for a specific target: `claude-code`, `cursor`, `copilot`, or `all` |
 | `--dry-run` | Preview all output without writing any files |
 | `--clean` | Remove orphaned marker blocks from prior harness profiles |
+| `--verbose` | Show skipped slots and extra detail in the compilation report |
 
 ## Output Files
 
