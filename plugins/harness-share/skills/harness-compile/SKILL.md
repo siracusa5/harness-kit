@@ -1,6 +1,7 @@
 ---
 name: harness-compile
 description: Use when user invokes /harness-compile or wants to compile a harness.yaml into native config files for Claude Code, Cursor, and GitHub Copilot. Generates CLAUDE.md, AGENT.md, .mcp.json, .cursor/rules/, .vscode/mcp.json, and related files from a single harness.yaml source. Supports --target, --dry-run, and --clean flags.
+disable-model-invocation: true
 ---
 
 # Compile a Harness Configuration
@@ -26,6 +27,8 @@ If no file is found at either location, tell the user:
 
 Read and parse the file. Extract `metadata.name` (use `default` if absent). Extract `version` to confirm v1 format. Note the `instructions.import-mode` value (default: `merge` if not specified).
 
+If `version` is absent, is the integer `1` (legacy format), or is any value other than the string `"1"`, stop and tell the user: "This harness.yaml uses an unsupported format. Run `/harness-validate` to check the file and see upgrade instructions."
+
 Also check for any flags the user passed:
 - `--target <claude-code|cursor|copilot|all>` — restricts which targets are compiled
 - `--dry-run` — preview output without writing any files
@@ -43,7 +46,7 @@ Otherwise, scan the working directory for platform indicators:
 **Cursor** is present if any of these exist: `.cursor/`, `.cursor/rules/`, `.cursor/mcp.json`, `.cursor/skills/`
 **Copilot** is present if any of these exist: `.github/`, `.vscode/mcp.json`, `.github/skills/`
 
-**Never assume a platform is present.** Detect each independently. A `.github/` directory alone is weak evidence — confirm if it's the only Copilot indicator.
+**Never assume a platform is present.** Detect each independently. If `.github/` is the only Copilot indicator, ask the user: "I found a `.github/` directory but no other Copilot indicators. Are you using GitHub Copilot in this project?"
 
 Present the detected platforms as a multi-select and ask the user to confirm or adjust:
 
@@ -169,6 +172,12 @@ All three files use identical JSON structure. Translate from harness YAML:
 
 **Merging:** If the target MCP file already exists, merge: add new servers defined in the harness, but do not overwrite existing server configurations. Servers already present in the file take precedence.
 
+If a server name in harness.yaml already exists in the target config file, **do not overwrite** but print a warning:
+```
+Warning: .mcp.json already defines server 'postgres'. Existing config kept.
+  To update it, edit .mcp.json directly or remove the entry and re-run.
+```
+
 Create parent directories if they don't exist.
 
 ---
@@ -192,7 +201,7 @@ For each plugin that has a SKILL.md, copy it to each confirmed target's skill di
 **Frontmatter adaptation when copying to Cursor/Copilot:**
 - If the source SKILL.md frontmatter has a `dependencies` field, rename it to `compatibility`
 - Enforce that the `name` field matches the folder name: lowercase letters and hyphens only, max 64 characters. Truncate and slugify if needed.
-- If `description` exceeds 1024 characters, truncate at 1024 characters.
+- If `description` exceeds 1024 characters, truncate at the last word boundary before 1024 characters and append `…`.
 
 Create parent directories before writing.
 
@@ -275,9 +284,17 @@ End with:
 
 **`--clean`:**
 
-In addition to normal compilation, scan all target files for orphaned marker blocks — markers whose `{name}` no longer matches `metadata.name` in the current harness.yaml. Remove those orphaned blocks from the files.
+In addition to normal compilation, scan all target files for orphaned marker blocks — markers whose `{name}` no longer matches `metadata.name` in the current harness.yaml.
 
-Example: if a file contains `<!-- BEGIN harness:old-harness:operational -->` but the current harness name is `data-engineer`, that block is orphaned and should be removed (only when `--clean` is passed).
+Example: if a file contains `<!-- BEGIN harness:old-harness:operational -->` but the current harness name is `data-engineer`, that block is orphaned.
+
+Before deleting any orphaned blocks, the agent **must**:
+1. List every orphaned block found: profile name, slot, file, and line numbers
+2. Show the user exactly what will be deleted
+3. Ask for confirmation: "Remove these N orphaned blocks? [y/N]"
+4. Only proceed with deletion if the user confirms
+
+This confirmation is required every time. `--clean` is a destructive operation with no recovery path — never skip this step.
 
 ---
 
@@ -302,9 +319,9 @@ Targets: claude-code, cursor
 ```
 
 Format rules:
-- List files in order: operational, behavioral, identity, mcp-servers, permissions, skills
-- Group by target (claude-code entries first, then cursor, then copilot)
-- Show skipped slots with reason: `Skipped: SOUL.md  (identity: null)` or `Skipped: SOUL.md  (target: cursor — not supported)`
+- Group by target: claude-code entries first, then cursor, then copilot
+- Within each target group, list files in slot order: operational, behavioral, identity, mcp-servers, permissions, skills
+- Skipped slots are omitted unless `--verbose` is passed
 - Show line counts for instruction files where calculable
 - Show server counts for MCP files
 - Show allowed/denied counts for permissions
@@ -320,6 +337,8 @@ Format rules:
 | Omitting Cursor `.mdc` frontmatter | Always add frontmatter to `.mdc` files — it is mandatory for Cursor to recognize the file |
 | Omitting Copilot `.instructions.md` frontmatter | Always add `applyTo: "**"` frontmatter to Copilot instructions files |
 | Overwriting existing MCP server configs on merge | Merge means add new servers only; existing server definitions win |
+| Silently skipping MCP server key collisions | Always warn when a server name already exists in the target file — never skip silently |
+| Expecting `import-mode` to be per-slot | `import-mode` is a single scalar under `instructions:` that applies to all slots. Per-slot override is not supported in v1 |
 | Writing SOUL.md for non-Claude-Code targets | `identity` slot is Claude Code-only — omit it for cursor and copilot |
 | Assuming platforms are present | Always detect independently; never assume a platform exists |
 | Applying `--clean` without the flag | Only remove orphaned markers when `--clean` is explicitly passed |
