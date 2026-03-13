@@ -25,7 +25,7 @@ Without a flag, detects all platforms present in the project and compares them.
 
 | Flag | Description |
 |------|-------------|
-| `--target <tool>` | Restrict scope to one platform: `claude-code`, `cursor`, or `copilot` |
+| `--target <tool>` | Restrict scope to one platform: `claude-code`, `cursor`, or `copilot`. Useful when you only want to push from one platform to another specific one, ignoring unrelated platforms. All platforms are still inventoried for the divergence report. |
 
 ## Divergence Report
 

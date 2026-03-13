@@ -18,7 +18,7 @@ This skill depends on harness-compile: the push path reuses harness-compile's co
 
 ### Step 1: Detect platforms
 
-Check for any `--target <platform>` flag the user passed. If present, restrict the entire workflow to that platform only. Valid values: `claude-code`, `cursor`, `copilot`.
+Check for any `--target <platform>` flag the user passed. If present, restrict the entire workflow to that platform only. Valid values: `claude-code`, `cursor`, `copilot`. For sync, `--target <platform>` means "treat this platform as the only target for push output." It does not restrict which platforms are scanned in Step 2 — all detected platforms are still inventoried so divergence can be identified.
 
 Otherwise, scan the working directory for platform indicators:
 
@@ -108,7 +108,7 @@ Skills:
   ✗ orient    — Claude Code only (missing from Cursor, Copilot)
 
 MCP:
-  ✓ postgres  — Claude Code, Cursor (missing from Copilot)
+  △ postgres  — Claude Code, Cursor (missing from Copilot)
   ✗ filesystem — Claude Code only
 
 Instructions:
@@ -137,6 +137,8 @@ Ask the user:
 
 Wait for the user's answer before proceeding.
 
+> Note: Copilot cannot be a push source. To incorporate changes made directly in Copilot config files into harness.yaml, use option 3 (pull).
+
 **Option 1 or 2 (push):** Note the source platform. Ask which targets to push to:
 > "Push to which platforms? (all detected platforms, or list specific ones)"
 
@@ -159,7 +161,29 @@ Before executing any sync, check for conflicts: a conflict exists when the same 
 
 **For push operations:** The source platform is authoritative. There are no conflicts — the source wins. Skip to Step 6.
 
-**For pull operations:** Any harness block that exists on both the source-of-pull (e.g., Cursor) and in harness.yaml with different content is a conflict.
+**For pull operations:** Two kinds of conflicts must be resolved before writing to harness.yaml:
+
+First, if multiple external platforms are selected as pull sources (e.g., both Cursor and Copilot), compare those platforms against each other. If the same harness block exists on both with different content, that is a cross-platform conflict that must be surfaced before either is merged into harness.yaml:
+
+```
+Cross-platform conflict: my-harness:operational
+
+Cursor (.cursor/rules/harness.mdc):
+  [content A]
+
+Copilot (.github/copilot-instructions.md):
+  [content B]
+
+These platforms disagree. Which should I pull from?
+1. Use Cursor version
+2. Use Copilot version
+3. Edit manually first, then re-run /harness-sync
+4. Skip this block
+```
+
+Resolve all cross-platform conflicts first, then proceed to compare the surviving version against harness.yaml.
+
+Second, any harness block that exists on the pull source and in harness.yaml with different content is a conflict.
 
 For each conflict, show both versions side by side and ask for resolution:
 
@@ -205,6 +229,10 @@ Create parent directories before writing if they don't exist.
 
 1. Read all content that exists outside harness marker blocks in the source platform's instruction files (Cursor or Copilot). This is native content the user added directly.
 2. Read all MCP servers that exist in source platform config files but are not in harness.yaml.
+
+**Skill files are not pulled.** Skills in harness.yaml are plugin source references (`source: owner/repo`), not file content. If Cursor has a skill in `.cursor/skills/` that is not in harness.yaml, it cannot be automatically added — the `plugins:` section requires knowing the plugin's source repo. Tell the user:
+> "I found skills in `.cursor/skills/` not in your harness.yaml: [list]. To add these, run `/harness-export` and specify their source repos when prompted."
+
 3. Summarize what would be added to harness.yaml:
 
 ```
@@ -266,3 +294,5 @@ Remaining divergence:
 | Reporting all items in the sync report, not just changed ones | Only report files that were actually added, updated, or skipped — do not list unchanged files |
 | Applying frontmatter adaptation only for new skills | Frontmatter rules (rename `dependencies`, enforce name constraints, truncate description) apply on every copy to Cursor/Copilot, including updates |
 | Showing only one version in a conflict | Always show both versions side by side with platform labels — never show just one |
+| Skipping cross-platform comparison on pull | When multiple platforms are pull sources, compare them against each other before merging into harness.yaml |
+| Expecting Copilot to be a push source | Copilot is a pull-only platform. Use option 3 to bring Copilot changes back into harness.yaml |
