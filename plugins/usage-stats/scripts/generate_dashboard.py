@@ -42,9 +42,7 @@ def shorten_model(name: str) -> str:
     if not name.startswith("claude-"):
         return name
     short = name[len("claude-"):]
-    # Trim everything from the second occurrence of "-202" onward.
-    # The *first* "-202" might be part of the model id itself (unlikely today
-    # but we follow the spec literally: "second -202").
+    # Trim everything from "-202" onward (date suffixes like -20250929).
     idx = short.find("-202")
     if idx != -1:
         short = short[:idx]
@@ -56,9 +54,15 @@ def shorten_model(name: str) -> str:
 # ---------------------------------------------------------------------------
 
 def decode_project_dir(dirname: str) -> str:
-    """Convert an encoded directory name back to a filesystem path.
+    """Best-effort conversion of an encoded project directory name to a path.
 
-    '-Users-john-repos-harness-kit' → '/Users/john/repos/harness-kit'
+    Claude Code encodes project paths by replacing '/' with '-', so hyphens
+    in the original path are indistinguishable from separators. The result is
+    a best-effort display name only — not a reliable filesystem path. Prefer
+    using dir_project_map (from history.jsonl) which records the actual path.
+
+    Example: '-Users-john-repos-my-project' → '/Users/john/repos/my/project'
+    (wrong if the repo name contains hyphens; dir_project_map avoids this)
     """
     if dirname.startswith("-"):
         return "/" + dirname[1:].replace("-", "/")
@@ -579,7 +583,11 @@ def resolve_dates(args: argparse.Namespace, cache: dict | None) -> tuple[date, d
     today = date.today()
     end_date = today
     if args.end:
-        end_date = date.fromisoformat(args.end)
+        try:
+            end_date = date.fromisoformat(args.end)
+        except ValueError:
+            print(f"Error: invalid --end date '{args.end}' — expected YYYY-MM-DD", file=sys.stderr)
+            sys.exit(1)
 
     if args.range:
         presets = {
@@ -590,18 +598,26 @@ def resolve_dates(args: argparse.Namespace, cache: dict | None) -> tuple[date, d
         }
         if args.range == "all":
             # Go back to first known date
+            start_date = today - timedelta(days=365)  # fallback
             if cache and cache.get("firstSessionDate"):
-                first = cache["firstSessionDate"]
-                start_date = date.fromisoformat(first[:10])
+                try:
+                    start_date = date.fromisoformat(cache["firstSessionDate"][:10])
+                except ValueError:
+                    pass  # keep fallback
             elif cache and cache.get("dailyActivity"):
-                dates = [d["date"] for d in cache["dailyActivity"]]
-                start_date = date.fromisoformat(min(dates))
-            else:
-                start_date = today - timedelta(days=365)
+                try:
+                    dates = [d["date"] for d in cache["dailyActivity"]]
+                    start_date = date.fromisoformat(min(dates))
+                except (ValueError, KeyError):
+                    pass  # keep fallback
         else:
             start_date = end_date - timedelta(days=presets[args.range] - 1)
     elif args.start:
-        start_date = date.fromisoformat(args.start)
+        try:
+            start_date = date.fromisoformat(args.start)
+        except ValueError:
+            print(f"Error: invalid --start date '{args.start}' — expected YYYY-MM-DD", file=sys.stderr)
+            sys.exit(1)
     else:
         start_date = end_date - timedelta(days=13)  # 14 days inclusive
 
@@ -660,6 +676,24 @@ def main() -> None:
     elapsed = time.monotonic() - t0
     print(f"Dashboard written to {output_path}", file=sys.stderr)
     print(f"Done in {elapsed:.1f}s", file=sys.stderr)
+
+    # Emit summary JSON to stdout for the skill to read
+    summary = report["summary"]
+    top_model = report["modelSplit"][0]["model"] if report["modelSplit"] else "unknown"
+    print(json.dumps({
+        "outputPath": str(output_path),
+        "startDate": report["meta"]["startDate"],
+        "endDate": report["meta"]["endDate"],
+        "daysActive": report["meta"]["daysActive"],
+        "totalMessages": summary["totalMessages"],
+        "totalSessions": summary["totalSessions"],
+        "totalOutputTokens": summary["totalOutputTokens"],
+        "totalInputTokens": summary["totalInputTokens"],
+        "totalCacheReadTokens": summary["totalCacheReadTokens"],
+        "busiestDay": summary["busiestDay"],
+        "quietestDay": summary["quietestDay"],
+        "topModel": top_model,
+    }))
 
     # Open in browser
     if not args.no_open:

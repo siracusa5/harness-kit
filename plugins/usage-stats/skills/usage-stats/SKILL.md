@@ -60,7 +60,7 @@ After the dashboard opens, provide a brief text summary (3-5 bullets) so the use
 - Model split (which model dominated)
 - Any notable trend (ramp-up, decline, model shift)
 
-Read the script's stdout (it prints a JSON summary) to get these numbers. Format large token counts readably: "10.7M output tokens", "2.5B cache-read tokens".
+Read the script's **stdout** to get these numbers — it prints a single JSON line with fields: `totalMessages`, `totalSessions`, `totalOutputTokens`, `totalInputTokens`, `totalCacheReadTokens`, `busiestDay`, `quietestDay`, `topModel`, `daysActive`, `startDate`, `endDate`. Parse it and format large token counts readably: "10.7M output tokens", "2.5B cache-read tokens". (Diagnostic messages go to stderr; ignore those.)
 
 ### Step 4: Offer Follow-Up
 

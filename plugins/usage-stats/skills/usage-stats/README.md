@@ -44,4 +44,4 @@ All data stays local. Nothing is sent to any server.
 ## Requirements
 
 - Python 3.10+
-- Browser (for viewing the dashboard)
+- Browser with internet access (charts use Chart.js from cdn.jsdelivr.net — they'll be blank if you're offline or behind a proxy that blocks CDN traffic)
