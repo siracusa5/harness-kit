@@ -1,0 +1,360 @@
+@import "tailwindcss";
+
+/* ── Theme tokens ── */
+:root {
+  /* Backgrounds */
+  --bg-base: #f4f2ef;
+  --bg-surface: #faf9f7;
+  --bg-elevated: #ffffff;
+  --bg-sidebar: rgba(236, 234, 230, 0.92);
+  --bg-sidebar-solid: #ece9e5;
+
+  /* Foregrounds */
+  --fg-base: #181714;
+  --fg-muted: #5c5a56;
+  --fg-subtle: #9a9892;
+  --fg-placeholder: #bcbab5;
+
+  /* Borders */
+  --border-base: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.14);
+  --separator: rgba(0, 0, 0, 0.07);
+
+  /* Accent — refined blue-violet */
+  --accent: #5b50e8;
+  --accent-light: rgba(91, 80, 232, 0.09);
+  --accent-fg: #4338d4;
+  --accent-text: #5b50e8;
+
+  /* Status */
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+
+  /* Sidebar */
+  --sidebar-width: 208px;
+
+  /* Interactive hover */
+  --hover-bg: rgba(0, 0, 0, 0.04);
+  --active-bg: rgba(0, 0, 0, 0.07);
+}
+
+.dark {
+  /* Backgrounds */
+  --bg-base: #1c1c1e;
+  --bg-surface: #242426;
+  --bg-elevated: #2c2c2e;
+  --bg-sidebar: rgba(28, 28, 30, 0.85);
+  --bg-sidebar-solid: #1e1e20;
+
+  /* Foregrounds */
+  --fg-base: #f2f2f7;
+  --fg-muted: #98989f;
+  --fg-subtle: #636366;
+  --fg-placeholder: #48484a;
+
+  /* Borders */
+  --border-base: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --separator: rgba(255, 255, 255, 0.07);
+
+  /* Accent */
+  --accent: #7b72f0;
+  --accent-light: rgba(123, 114, 240, 0.12);
+  --accent-fg: #9d96f5;
+  --accent-text: #9d96f5;
+
+  /* Interactive hover */
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  --active-bg: rgba(255, 255, 255, 0.09);
+}
+
+/* ── Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--fg-base);
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbars — macOS-style thin ── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 3px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* ── Typography helpers ── */
+.text-title {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: var(--fg-base);
+}
+
+.text-headline {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-base);
+}
+
+.text-body {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--fg-base);
+}
+
+.text-caption {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--fg-muted);
+}
+
+.text-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+/* ── Sidebar nav ── */
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px 4px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+  user-select: none;
+  -webkit-app-region: no-drag;
+}
+
+.sidebar-item:hover {
+  background: var(--hover-bg);
+  color: var(--fg-base);
+}
+
+.sidebar-item.active {
+  background: var(--accent-light);
+  color: var(--accent-text);
+  font-weight: 500;
+}
+
+.sidebar-subitem {
+  display: flex;
+  align-items: center;
+  padding: 3px 10px 3px 28px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--fg-subtle);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+  user-select: none;
+  -webkit-app-region: no-drag;
+}
+
+.sidebar-subitem:hover {
+  background: var(--hover-bg);
+  color: var(--fg-muted);
+}
+
+.sidebar-subitem.active {
+  background: var(--accent-light);
+  color: var(--accent-text);
+  font-weight: 500;
+}
+
+/* ── Row list (macOS-style) ── */
+.row-list {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-base);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.row-list-item {
+  display: flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--separator);
+  transition: background 0.1s;
+}
+
+.row-list-item:last-child {
+  border-bottom: none;
+}
+
+.row-list-item:hover {
+  background: var(--hover-bg);
+}
+
+/* ── Markdown body ── */
+.markdown-body {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+
+.markdown-body > *:first-child { margin-top: 0; }
+.markdown-body > *:last-child  { margin-bottom: 0; }
+
+.markdown-body h1 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fg-base);
+  margin: 0 0 10px;
+  letter-spacing: -0.2px;
+}
+.markdown-body h2 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fg-base);
+  margin: 20px 0 8px;
+}
+.markdown-body h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fg-base);
+  margin: 16px 0 5px;
+}
+.markdown-body h4 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fg-subtle);
+  margin: 12px 0 4px;
+}
+
+.markdown-body p {
+  margin: 0 0 8px;
+}
+
+.markdown-body strong {
+  font-weight: 600;
+  color: var(--fg-base);
+}
+
+.markdown-body em {
+  font-style: italic;
+}
+
+.markdown-body a {
+  color: var(--accent-text);
+  text-decoration: underline;
+}
+
+.markdown-body code {
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  background: var(--bg-base);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--accent-text);
+}
+
+.markdown-body pre {
+  background: var(--bg-base);
+  border: 1px solid var(--border-base);
+  border-radius: 6px;
+  padding: 12px 14px;
+  overflow-x: auto;
+  margin: 10px 0;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.markdown-body pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  color: var(--fg-muted);
+  border-radius: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin: 6px 0 10px;
+  padding-left: 20px;
+}
+
+.markdown-body li {
+  margin-bottom: 3px;
+}
+
+.markdown-body li > p {
+  margin: 0;
+}
+
+.markdown-body blockquote {
+  border-left: 3px solid var(--border-strong);
+  padding: 4px 12px;
+  margin: 8px 0;
+  color: var(--fg-subtle);
+  font-style: italic;
+}
+
+.markdown-body blockquote p {
+  margin: 0;
+}
+
+.markdown-body hr {
+  border: none;
+  border-top: 1px solid var(--border-base);
+  margin: 16px 0;
+}
+
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 11px;
+}
+
+.markdown-body th,
+.markdown-body td {
+  border: 1px solid var(--border-base);
+  padding: 5px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.markdown-body th {
+  background: var(--bg-base);
+  font-weight: 600;
+  color: var(--fg-base);
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
