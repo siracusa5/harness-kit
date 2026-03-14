@@ -112,12 +112,15 @@ h1, h2, h3 {
 /* ── Content spacing — breathing room ── */
 [data-fumadocs-body] {
   line-height: 1.8;
+  position: relative;
 }
 [data-fumadocs-body] p {
   margin-bottom: 1.25em;
 }
 [data-fumadocs-body] h2 {
   margin-top: 2.5em;
+  position: relative;
+  padding-top: 1.5em;
 }
 [data-fumadocs-body] h3 {
   margin-top: 1.75em;
@@ -264,4 +267,36 @@ pre code {
 .dark [data-fumadocs-body] h3 {
   font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   letter-spacing: -0.03em;
+}
+
+/* ── Gradient accent moments ── */
+
+/* H2 section dividers — gradient line above */
+[data-fumadocs-body] h2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, hsla(256, 70%, 60%, 0.2), transparent);
+}
+
+/* First H2 on page — no divider (title already separates it) */
+[data-fumadocs-body] h2:first-of-type::before {
+  display: none;
+}
+
+/* Page title area — subtle radial glow */
+[data-fumadocs-body]::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 300px;
+  background: radial-gradient(ellipse, hsla(256, 70%, 50%, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
 }
