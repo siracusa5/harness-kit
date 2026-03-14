@@ -200,6 +200,10 @@ h1, h2, h3 {
 }
 
 /* ── Code blocks — warm with subtle glow ── */
+figure.shiki,
+figure:has(pre) {
+  border: none !important;
+}
 pre {
   border: none !important;
   position: relative;
