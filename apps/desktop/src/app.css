@@ -216,6 +216,141 @@ body {
   background: var(--hover-bg);
 }
 
+/* ── Markdown body ── */
+.markdown-body {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+
+.markdown-body > *:first-child { margin-top: 0; }
+.markdown-body > *:last-child  { margin-bottom: 0; }
+
+.markdown-body h1 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fg-base);
+  margin: 0 0 10px;
+  letter-spacing: -0.2px;
+}
+.markdown-body h2 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fg-base);
+  margin: 20px 0 8px;
+}
+.markdown-body h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fg-base);
+  margin: 16px 0 5px;
+}
+.markdown-body h4 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fg-subtle);
+  margin: 12px 0 4px;
+}
+
+.markdown-body p {
+  margin: 0 0 8px;
+}
+
+.markdown-body strong {
+  font-weight: 600;
+  color: var(--fg-base);
+}
+
+.markdown-body em {
+  font-style: italic;
+}
+
+.markdown-body a {
+  color: var(--accent-text);
+  text-decoration: underline;
+}
+
+.markdown-body code {
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  background: var(--bg-base);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--accent-text);
+}
+
+.markdown-body pre {
+  background: var(--bg-base);
+  border: 1px solid var(--border-base);
+  border-radius: 6px;
+  padding: 12px 14px;
+  overflow-x: auto;
+  margin: 10px 0;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.markdown-body pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  color: var(--fg-muted);
+  border-radius: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin: 6px 0 10px;
+  padding-left: 20px;
+}
+
+.markdown-body li {
+  margin-bottom: 3px;
+}
+
+.markdown-body li > p {
+  margin: 0;
+}
+
+.markdown-body blockquote {
+  border-left: 3px solid var(--border-strong);
+  padding: 4px 12px;
+  margin: 8px 0;
+  color: var(--fg-subtle);
+  font-style: italic;
+}
+
+.markdown-body blockquote p {
+  margin: 0;
+}
+
+.markdown-body hr {
+  border: none;
+  border-top: 1px solid var(--border-base);
+  margin: 16px 0;
+}
+
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 11px;
+}
+
+.markdown-body th,
+.markdown-body td {
+  border: 1px solid var(--border-base);
+  padding: 5px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.markdown-body th {
+  background: var(--bg-base);
+  font-weight: 600;
+  color: var(--fg-base);
+}
+
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

@@ -1,69 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import DOMPurify from "dompurify";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { supabase } from "../../lib/supabase";
 import type { Component } from "@harness-kit/shared";
 
 type RelatedComponent = Pick<Component, "id" | "slug" | "name" | "install_count">;
-
-/**
- * Minimal markdown-to-HTML renderer.
- * Output is always passed through DOMPurify before injection.
- * Uses CSS variable-based inline styles to match the macOS HIG design system.
- */
-function renderMarkdown(md: string): string {
-  const raw = md
-    // Fenced code blocks (must run before inline code)
-    .replace(
-      /```(\w*)\n?([\s\S]*?)```/g,
-      '<pre style="overflow-x:auto;border-radius:6px;background:var(--bg-base);border:1px solid var(--border-base);padding:12px 14px;font-size:11px;font-family:ui-monospace,monospace;line-height:1.6;margin:10px 0"><code>$2</code></pre>',
-    )
-    // Headings
-    .replace(
-      /^#### (.+)$/gm,
-      '<h4 style="font-size:12px;font-weight:600;margin:16px 0 4px;color:var(--fg-base)">$1</h4>',
-    )
-    .replace(
-      /^### (.+)$/gm,
-      '<h3 style="font-size:13px;font-weight:600;margin:20px 0 6px;color:var(--fg-base)">$1</h3>',
-    )
-    .replace(
-      /^## (.+)$/gm,
-      '<h2 style="font-size:14px;font-weight:700;margin:24px 0 8px;color:var(--fg-base)">$1</h2>',
-    )
-    .replace(
-      /^# (.+)$/gm,
-      '<h1 style="font-size:15px;font-weight:700;margin:0 0 10px;color:var(--fg-base)">$1</h1>',
-    )
-    // Bold
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    // Inline code
-    .replace(
-      /`([^`]+)`/g,
-      '<code style="border-radius:4px;background:var(--bg-base);padding:1px 5px;font-size:11px;font-family:ui-monospace,monospace;color:var(--accent-text)">$1</code>',
-    )
-    // Links
-    .replace(
-      /\[([^\]]+)\]\(([^)]+)\)/g,
-      '<a href="$2" style="color:var(--accent-text);text-decoration:underline" target="_blank" rel="noopener noreferrer">$1</a>',
-    )
-    // Unordered lists
-    .replace(
-      /^- (.+)$/gm,
-      '<li style="margin-left:16px;list-style-type:disc;color:var(--fg-muted);margin-bottom:2px">$1</li>',
-    )
-    // Paragraphs (skip lines that start with HTML tags)
-    .replace(
-      /^(?!<[hluop]|<li|<pre|<code|<strong|<a|<br)(.+)$/gm,
-      '<p style="margin:0 0 8px;color:var(--fg-muted)">$1</p>',
-    );
-
-  return DOMPurify.sanitize(raw, {
-    ALLOWED_TAGS: ["h1", "h2", "h3", "h4", "p", "pre", "code", "strong", "a", "li", "ul", "ol"],
-    ALLOWED_ATTR: ["href", "target", "rel", "style"],
-    ALLOW_DATA_ATTR: false,
-  });
-}
 
 function TrustBadge({ tier }: { tier: Component["trust_tier"] }) {
   const colors: Record<Component["trust_tier"], { bg: string; color: string }> = {
@@ -228,8 +170,6 @@ export default function PluginDetailPage() {
       })
     : null;
 
-  const skillHtml = component.skill_md ? renderMarkdown(component.skill_md) : null;
-  const readmeHtml = component.readme_md ? renderMarkdown(component.readme_md) : null;
 
   return (
     <div style={{ padding: "20px 24px" }}>
@@ -296,58 +236,12 @@ export default function PluginDetailPage() {
             </div>
           )}
 
-          {/* SKILL.md — sanitized with DOMPurify */}
-          {skillHtml && (
-            <section style={{ marginBottom: "24px" }}>
-              <p style={{
-                fontSize: "10px",
-                fontWeight: 600,
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-                color: "var(--fg-subtle)",
-                margin: "0 0 8px",
-              }}>
-                Skill Definition
-              </p>
-              <div
-                style={{
-                  background: "var(--bg-surface)",
-                  border: "1px solid var(--border-base)",
-                  borderRadius: "8px",
-                  padding: "14px 16px",
-                  fontSize: "12px",
-                  lineHeight: "1.55",
-                }}
-                dangerouslySetInnerHTML={{ __html: skillHtml }}
-              />
-            </section>
+          {component.skill_md && (
+            <MarkdownPanel content={component.skill_md} title="Skill Definition" />
           )}
 
-          {/* README.md — sanitized with DOMPurify */}
-          {readmeHtml && (
-            <section style={{ marginBottom: "24px" }}>
-              <p style={{
-                fontSize: "10px",
-                fontWeight: 600,
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-                color: "var(--fg-subtle)",
-                margin: "0 0 8px",
-              }}>
-                Documentation
-              </p>
-              <div
-                style={{
-                  background: "var(--bg-surface)",
-                  border: "1px solid var(--border-base)",
-                  borderRadius: "8px",
-                  padding: "14px 16px",
-                  fontSize: "12px",
-                  lineHeight: "1.55",
-                }}
-                dangerouslySetInnerHTML={{ __html: readmeHtml }}
-              />
-            </section>
+          {component.readme_md && (
+            <MarkdownPanel content={component.readme_md} title="Documentation" />
           )}
         </div>
 
@@ -457,6 +351,82 @@ export default function PluginDetailPage() {
         </aside>
       </div>
     </div>
+  );
+}
+
+// ── Markdown panel with Preview / Raw toggle ──────────────────
+
+function MarkdownPanel({ content, title }: { content: string; title: string }) {
+  const [view, setView] = useState<"preview" | "raw">("preview");
+
+  const tabBtn = (active: boolean): React.CSSProperties => ({
+    fontSize: "10px",
+    fontWeight: active ? 600 : 400,
+    padding: "3px 8px",
+    borderRadius: "4px",
+    border: "none",
+    background: active ? "var(--bg-elevated)" : "transparent",
+    color: active ? "var(--fg-base)" : "var(--fg-subtle)",
+    cursor: "pointer",
+    boxShadow: active ? "0 1px 2px rgba(0,0,0,0.08)" : "none",
+    transition: "all 0.1s",
+  });
+
+  return (
+    <section style={{ marginBottom: "24px" }}>
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginBottom: "8px",
+      }}>
+        <p style={{
+          fontSize: "10px",
+          fontWeight: 600,
+          textTransform: "uppercase",
+          letterSpacing: "0.05em",
+          color: "var(--fg-subtle)",
+          margin: 0,
+        }}>
+          {title}
+        </p>
+        <div style={{
+          display: "flex",
+          gap: "2px",
+          background: "var(--bg-base)",
+          border: "1px solid var(--border-base)",
+          borderRadius: "6px",
+          padding: "2px",
+        }}>
+          <button onClick={() => setView("preview")} style={tabBtn(view === "preview")}>Preview</button>
+          <button onClick={() => setView("raw")} style={tabBtn(view === "raw")}>Raw</button>
+        </div>
+      </div>
+      <div style={{
+        background: "var(--bg-surface)",
+        border: "1px solid var(--border-base)",
+        borderRadius: "8px",
+        padding: "14px 16px",
+      }}>
+        {view === "preview" ? (
+          <div className="markdown-body">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+          </div>
+        ) : (
+          <pre style={{
+            margin: 0,
+            fontFamily: "ui-monospace, monospace",
+            fontSize: "11px",
+            lineHeight: "1.6",
+            color: "var(--fg-muted)",
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-word",
+          }}>
+            {content}
+          </pre>
+        )}
+      </div>
+    </section>
   );
 }
 
