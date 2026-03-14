@@ -152,17 +152,41 @@ h1, h2, h3 {
   background: linear-gradient(90deg, transparent, hsla(256, 85%, 72%, 0.2), transparent);
 }
 
-/* ── Sidebar active item ── */
+/* ── Sidebar — smooth hover + animated active bar ── */
+[data-fumadocs-sidebar] a {
+  transition: background-color 0.2s ease, padding-left 0.2s ease, border-color 0.2s ease;
+  border-left: 2px solid transparent;
+}
+[data-fumadocs-sidebar] a:hover {
+  background: hsla(230, 10%, 50%, 0.08);
+}
+.dark [data-fumadocs-sidebar] a:hover {
+  background: hsla(230, 10%, 50%, 0.1);
+}
 .dark [data-fumadocs-sidebar] [aria-current="page"],
 .dark [data-fumadocs-sidebar] [data-active="true"] {
   border-left: 2px solid hsl(256, 85%, 72%);
   background: hsla(256, 30%, 14%, 0.5);
   padding-left: 10px;
+  transition: all 0.2s ease;
 }
 
-/* ── TOC active item ── */
+/* ── TOC — smooth active indicator ── */
+[data-fumadocs-toc] a {
+  transition: color 0.2s ease, border-color 0.2s ease;
+  border-left: 2px solid transparent;
+  padding-left: 0.5rem;
+}
 .dark [data-fumadocs-toc] [data-active="true"] {
   color: hsl(256, 85%, 72%);
+  border-left-color: hsl(256, 85%, 72%);
+}
+
+/* ── Search — focus glow ── */
+[data-fumadocs-nav] button:focus-visible,
+[data-fumadocs-nav] input:focus-visible {
+  box-shadow: 0 0 0 2px hsla(256, 70%, 60%, 0.3);
+  outline: none;
 }
 
 /* ── Code blocks — warm with subtle glow ── */
