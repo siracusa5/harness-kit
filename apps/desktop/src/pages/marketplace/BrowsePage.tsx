@@ -96,6 +96,7 @@ export default function BrowsePage() {
         if (catRes.error) throw catRes.error;
         if (ccRes.error) throw ccRes.error;
         if (ctRes.error) throw ctRes.error;
+        if (tagRes.error) throw tagRes.error;
         setComponents((compRes.data ?? []) as Component[]);
         setCategories((catRes.data ?? []) as Category[]);
         setComponentCategories((ccRes.data ?? []) as ComponentCategory[]);
