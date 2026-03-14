@@ -212,6 +212,16 @@ pre button:hover {
   padding: 0.75rem 1rem;
 }
 
+/* ── Callouts — colored left border, no outer border ── */
+.dark [role="alert"],
+.dark [data-callout] {
+  border: none !important;
+  border-left: 3px solid var(--callout-color, hsl(256, 85%, 72%)) !important;
+  border-radius: 0 0.75rem 0.75rem 0;
+  background: hsla(230, 10%, 8%, 0.5) !important;
+  padding: 1rem 1.25rem;
+}
+
 /* ── Tables — borderless with row tinting ── */
 table {
   border: none !important;
@@ -241,10 +251,28 @@ table th {
   text-align: left;
 }
 
-/* ── Cards — remove default border ── */
+/* ── Cards — hover scale + glow ── */
 [data-card] {
-  border: none !important;
-  transition: all 0.3s ease;
+  border: 1px solid hsla(230, 15%, 20%, 0.15) !important;
+  border-radius: 0.75rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+[data-card]:hover {
+  transform: scale(1.02);
+  border-color: hsla(256, 70%, 60%, 0.3) !important;
+  box-shadow: 0 8px 24px -8px hsla(256, 60%, 40%, 0.15),
+              0 0 0 1px hsla(256, 70%, 60%, 0.1);
+}
+
+/* ── Steps — accent-colored badges + styled line ── */
+.dark .fd-steps {
+  border-color: hsla(256, 60%, 50%, 0.2) !important;
+}
+.dark .fd-step::before {
+  background: hsl(256, 70%, 55%) !important;
+  color: white !important;
+  font-weight: 600;
+  box-shadow: 0 0 12px -2px hsla(256, 70%, 55%, 0.4);
 }
 
 /* ── Inline code — subtle background, no border ── */
